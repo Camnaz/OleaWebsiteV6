@@ -8,6 +8,9 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["300", "400", 
 export const metadata: Metadata = {
   title: "Olea Computer | Building the infrastructure for autonomous intelligence",
   description: "We're building the foundational infrastructure for a world where autonomous agents operate as trusted economic participants.",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
