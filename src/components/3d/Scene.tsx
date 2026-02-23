@@ -1,7 +1,6 @@
 "use client";
 
 import { Canvas } from '@react-three/fiber';
-import { ScrollControls } from '@react-three/drei';
 import { Suspense } from 'react';
 import { AgentNetwork } from './AgentNetwork';
 
@@ -20,10 +19,7 @@ export function Scene() {
         <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#e5e7eb" />
 
         <Suspense fallback={null}>
-          <ScrollControls pages={4} damping={0.2}>
-            {/* Central harmonic agent network */}
-            <AgentNetwork />
-          </ScrollControls>
+          <AgentNetwork />
         </Suspense>
       </Canvas>
     </div>
