@@ -4,8 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { ScrollControls } from '@react-three/drei';
 import { Suspense } from 'react';
 import { FuturisticParticles } from './Particles';
-import { GeometricShapes } from './GeometricShapes';
-import { CoreNetwork } from './CoreNetwork';
+import { AgentNetwork } from './AgentNetwork';
 
 export function Scene() {
   return (
@@ -26,11 +25,8 @@ export function Scene() {
             {/* Background ambient particles */}
             <FuturisticParticles />
             
-            {/* Central geometric shapes that animate on scroll */}
-            <GeometricShapes />
-            
-            {/* Connecting network lines in the background */}
-            <CoreNetwork />
+            {/* Central harmonic agent network */}
+            <AgentNetwork />
           </ScrollControls>
         </Suspense>
       </Canvas>
