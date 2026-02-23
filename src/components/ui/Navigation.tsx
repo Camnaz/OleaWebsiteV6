@@ -52,10 +52,9 @@ export function Navigation() {
             >
               <Link
                 href={link.href}
-                className="text-xs font-sans font-light tracking-[0.2em] uppercase text-gray-500 hover:text-black transition-colors duration-500 cursor-none relative group"
+                className="text-xs font-sans font-light tracking-[0.2em] uppercase text-gray-400 hover:text-black transition-colors duration-500 cursor-none"
               >
                 {link.name}
-                <span className="absolute -bottom-2 left-0 w-0 h-[0.5px] bg-black transition-all duration-500 group-hover:w-full"></span>
               </Link>
             </motion.div>
           ))}
