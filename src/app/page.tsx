@@ -35,11 +35,6 @@ export default function Home() {
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-4xl mx-auto relative z-20"
             >
-              <div className="inline-flex items-center px-6 py-2 rounded-full border border-sky-200/50 bg-white/60 backdrop-blur-md mb-12 text-[10px] font-sans tracking-[0.3em] uppercase shadow-sm">
-                <span className="flex h-1.5 w-1.5 rounded-full bg-sky-500 mr-4 animate-pulse shadow-[0_0_8px_rgba(14,165,233,0.8)]"></span>
-                System Initialization
-              </div>
-              
               <h1 className="text-6xl md:text-8xl font-serif italic tracking-tight mb-8 leading-[1.1] text-slate-900">
                 Infrastructure for <br className="hidden md:block" />
                 <span className="font-sans font-light not-italic tracking-tighter text-black">autonomous</span> <br className="hidden md:block" />

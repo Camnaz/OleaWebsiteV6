@@ -38,7 +38,8 @@ export function CustomCursor() {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-black rounded-full pointer-events-none z-50 shadow-[0_0_4px_rgba(255,255,255,0.8)]"
+        className="fixed top-0 left-0 w-3 h-3 bg-slate-900 rounded-full pointer-events-none shadow-[0_0_4px_rgba(255,255,255,0.8)]"
+        style={{ zIndex: 999999 }}
         animate={{
           x: mousePosition.x - 6,
           y: mousePosition.y - 6,
@@ -52,7 +53,8 @@ export function CustomCursor() {
         }}
       />
       <motion.div
-        className="fixed top-0 left-0 w-12 h-12 border-[0.5px] border-black bg-white/10 backdrop-blur-[1px] rounded-full pointer-events-none z-50"
+        className="fixed top-0 left-0 w-12 h-12 border-[0.5px] border-slate-900 bg-white/10 backdrop-blur-[1px] rounded-full pointer-events-none"
+        style={{ zIndex: 999998 }}
         animate={{
           x: mousePosition.x - 24,
           y: mousePosition.y - 24,
