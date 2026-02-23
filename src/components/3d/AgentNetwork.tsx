@@ -12,12 +12,14 @@ export function AgentNetwork() {
   useEffect(() => {
     const handleScroll = () => {
       // Calculate scroll progress (0 to 1) based on document height
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const totalHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const progress = window.scrollY / totalHeight;
       setScrollY(progress);
     };
     
     window.addEventListener("scroll", handleScroll);
+    // Initial call
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   
@@ -94,7 +96,6 @@ export function AgentNetwork() {
     if (!group.current || !linesRef.current) return;
     
     const t = state.clock.elapsedTime;
-    // We use the raw native scrollY state we track manually
     const scrollOffset = scrollY; 
     
     // Extremely slow, majestic rotation
