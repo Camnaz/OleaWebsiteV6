@@ -7,44 +7,47 @@ import * as THREE from 'three';
 
 export function AgentNetwork() {
   const group = useRef<THREE.Group>(null);
-  const linesRef = useRef<THREE.LineSegments>(null);
   const pointsRef = useRef<THREE.Points>(null);
+  const linesRef = useRef<THREE.LineSegments>(null);
   const scroll = useScroll();
   const { mouse, viewport } = useThree();
   
-  // Algorithm: Golden spiral on a sphere (Fibonacci lattice)
-  // Represents ordered, harmonious agent distribution
+  // Algorithm: A structured, calm 3D grid representing an organized computational matrix of agents
   const { positions, originalPositions, lines } = useMemo(() => {
-    const nodeCount = 300;
-    const positions = new Float32Array(nodeCount * 3);
-    const originalPositions = new Float32Array(nodeCount * 3);
+    const size = 8; // 8x8x8 grid = 512 nodes
+    const spacing = 1.2;
+    const offset = (size * spacing) / 2 - (spacing / 2);
+    
+    const positions = new Float32Array(size * size * size * 3);
+    const originalPositions = new Float32Array(size * size * size * 3);
     const nodes: THREE.Vector3[] = [];
     
-    const phi = Math.PI * (3 - Math.sqrt(5)); // Golden angle
-    
-    for (let i = 0; i < nodeCount; i++) {
-      const y = 1 - (i / (nodeCount - 1)) * 2; // y goes from 1 to -1
-      const radius = Math.sqrt(1 - y * y); // radius at y
-      const theta = phi * i; // golden angle increment
-      
-      const x = Math.cos(theta) * radius;
-      const z = Math.sin(theta) * radius;
-      
-      // Scale up the sphere
-      const scale = 4;
-      const v = new THREE.Vector3(x * scale, y * scale, z * scale);
-      
-      nodes.push(v);
-      v.toArray(positions, i * 3);
-      v.toArray(originalPositions, i * 3);
+    let idx = 0;
+    for (let x = 0; x < size; x++) {
+      for (let y = 0; y < size; y++) {
+        for (let z = 0; z < size; z++) {
+          const px = x * spacing - offset;
+          const py = y * spacing - offset;
+          const pz = z * spacing - offset;
+          
+          const v = new THREE.Vector3(px, py, pz);
+          nodes.push(v);
+          
+          v.toArray(positions, idx * 3);
+          v.toArray(originalPositions, idx * 3);
+          idx++;
+        }
+      }
     }
 
-    // Connect nodes based on proximity (creating an organized mesh)
+    // Connect adjacent nodes to form the matrix structure
     const lines: number[] = [];
-    for (let i = 0; i < nodeCount; i++) {
-      for (let j = i + 1; j < nodeCount; j++) {
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
         const dist = nodes[i].distanceTo(nodes[j]);
-        if (dist > 0 && dist < 1.5) {
+        // Only connect immediate orthogonal neighbors (distance exactly equal to spacing)
+        // Add a tiny epsilon for float comparison
+        if (Math.abs(dist - spacing) < 0.01) {
           lines.push(
             nodes[i].x, nodes[i].y, nodes[i].z,
             nodes[j].x, nodes[j].y, nodes[j].z
@@ -66,34 +69,26 @@ export function AgentNetwork() {
     const t = state.clock.elapsedTime;
     const scrollOffset = scroll.offset; // 0 to 1
     
-    // Harmonic overall rotation
-    group.current.rotation.y += delta * 0.1;
-    group.current.rotation.x = Math.sin(t * 0.1) * 0.2;
-    group.current.rotation.z = Math.cos(t * 0.1) * 0.1;
+    // Very slow, calm, majestic rotation
+    group.current.rotation.y += delta * 0.05;
+    group.current.rotation.x = Math.sin(t * 0.05) * 0.1;
     
-    // Zoom and position effects based on scroll
-    // Start zoomed out, zoom in as we scroll, then pan
-    const targetZ = scrollOffset < 0.3 
-      ? THREE.MathUtils.lerp(0, 5, scrollOffset / 0.3) 
-      : THREE.MathUtils.lerp(5, -2, (scrollOffset - 0.3) / 0.7);
+    // Zoom out effect based on scroll (start inside the matrix, zoom out to see the whole structure)
+    const targetZ = scrollOffset < 0.5 
+      ? THREE.MathUtils.lerp(2, -15, scrollOffset * 2) 
+      : THREE.MathUtils.lerp(-15, -20, (scrollOffset - 0.5) * 2);
       
-    const targetY = scrollOffset < 0.3 
-      ? 0 
-      : THREE.MathUtils.lerp(0, 3, (scrollOffset - 0.3) / 0.7);
+    // Pan slightly up as we scroll down
+    const targetY = scrollOffset * 5;
       
     group.current.position.z = THREE.MathUtils.lerp(group.current.position.z, targetZ, 0.05);
     group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, targetY, 0.05);
 
-    // Mouse interaction - "repel" or "attract" nodes based on mouse position
-    // Convert mouse to world coordinates roughly
+    // Mouse interaction - precise, subtle displacement
     const mouseX = (mouse.x * viewport.width) / 2;
     const mouseY = (mouse.y * viewport.height) / 2;
     
     const posAttribute = pointsRef.current.geometry.attributes.position;
-    
-    // We'll update the points, and we need to rebuild lines if we want them to follow exactly,
-    // but for performance, we apply a subtle wave to the points that the lines follow loosely
-    // In a highly optimized version, we'd use shaders. Here we use CPU math for control.
     
     for (let i = 0; i < posAttribute.count; i++) {
       const idx = i * 3;
@@ -101,57 +96,46 @@ export function AgentNetwork() {
       const origY = originalPositions[idx + 1];
       const origZ = originalPositions[idx + 2];
       
-      // Complex algorithmic motion: 
-      // 1. Base breathing (sine waves based on original position)
-      // 2. Scroll-based expansion/contraction
-      // 3. Mouse proximity effect
-      
-      const breathScale = 1 + Math.sin(t * 0.5 + origY * 2) * 0.05;
-      const scrollScale = 1 + scrollOffset * 0.5;
-      
-      // Calculate world position of this node for mouse interaction
+      // Calculate world position for mouse interaction
       const nodeWorldPos = new THREE.Vector3(origX, origY, origZ);
       nodeWorldPos.applyMatrix4(group.current.matrixWorld);
       
-      // Vector from mouse to node
       const distToMouse = Math.sqrt(
         Math.pow(nodeWorldPos.x - mouseX, 2) + 
         Math.pow(nodeWorldPos.y - mouseY, 2)
       );
       
-      // Mouse push effect (nodes move away from mouse)
+      // Subtle magnetic repulsion
       let mousePushX = 0;
       let mousePushY = 0;
       let mousePushZ = 0;
       
-      if (distToMouse < 4) {
-        const force = (4 - distToMouse) * 0.5;
+      if (distToMouse < 3) {
+        const force = (3 - distToMouse) * 0.3;
         const dirX = nodeWorldPos.x - mouseX;
         const dirY = nodeWorldPos.y - mouseY;
-        // Normalize roughly
         const len = Math.sqrt(dirX*dirX + dirY*dirY) || 1;
         mousePushX = (dirX / len) * force;
         mousePushY = (dirY / len) * force;
-        mousePushZ = force * 0.5; // Push outwards towards camera too
+        mousePushZ = force * 0.2; 
       }
       
-      // Transform original positions back to local space after mouse push
-      const finalX = origX * breathScale * scrollScale + mousePushX;
-      const finalY = origY * breathScale * scrollScale + mousePushY;
-      const finalZ = origZ * breathScale * scrollScale + mousePushZ;
+      // Add a very subtle, slow sine wave based on position to make it feel "alive" but calm
+      const wave = Math.sin(t * 0.5 + origX * 0.5 + origZ * 0.5) * 0.05;
+      
+      const finalX = origX + mousePushX;
+      const finalY = origY + mousePushY + wave;
+      const finalZ = origZ + mousePushZ;
 
-      // Smooth interpolation to target
-      posAttribute.array[idx] += (finalX - posAttribute.array[idx]) * 0.1;
-      posAttribute.array[idx + 1] += (finalY - posAttribute.array[idx + 1]) * 0.1;
-      posAttribute.array[idx + 2] += (finalZ - posAttribute.array[idx + 2]) * 0.1;
+      posAttribute.array[idx] += (finalX - posAttribute.array[idx]) * 0.05;
+      posAttribute.array[idx + 1] += (finalY - posAttribute.array[idx + 1]) * 0.05;
+      posAttribute.array[idx + 2] += (finalZ - posAttribute.array[idx + 2]) * 0.05;
     }
     
     posAttribute.needsUpdate = true;
     
-    // For lines, we just rotate the whole mesh and apply a global scale to match the points roughly
-    // Recalculating all line segments every frame is too heavy.
-    const globalScale = 1 + scrollOffset * 0.5;
-    linesRef.current.scale.set(globalScale, globalScale, globalScale);
+    // Rotate the lines to match the group, but we don't deform the lines per-vertex 
+    // to maintain performance and keep the structural "ghost" intact behind the moving nodes
   });
 
   return (
@@ -166,12 +150,14 @@ export function AgentNetwork() {
             args={[positions, 3]}
           />
         </bufferGeometry>
+        {/* Sick, high-value aesthetic for the nodes (bright cyan/blue indicating active agents) */}
         <pointsMaterial 
-          size={0.08} 
-          color="#000000" 
+          size={0.15} 
+          color="#00f0ff" 
           transparent 
-          opacity={0.8}
+          opacity={0.9}
           sizeAttenuation={true}
+          blending={THREE.AdditiveBlending}
         />
       </points>
       <lineSegments ref={linesRef}>
@@ -184,10 +170,11 @@ export function AgentNetwork() {
             args={[lines, 3]}
           />
         </bufferGeometry>
+        {/* Subtle, dark skeletal structure */}
         <lineBasicMaterial 
-          color="#9ca3af" 
+          color="#1f2937" 
           transparent 
-          opacity={0.15} 
+          opacity={0.4} 
           depthWrite={false}
         />
       </lineSegments>

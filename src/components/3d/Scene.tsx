@@ -3,7 +3,6 @@
 import { Canvas } from '@react-three/fiber';
 import { ScrollControls } from '@react-three/drei';
 import { Suspense } from 'react';
-import { FuturisticParticles } from './Particles';
 import { AgentNetwork } from './AgentNetwork';
 
 export function Scene() {
@@ -22,9 +21,6 @@ export function Scene() {
 
         <Suspense fallback={null}>
           <ScrollControls pages={4} damping={0.2}>
-            {/* Background ambient particles */}
-            <FuturisticParticles />
-            
             {/* Central harmonic agent network */}
             <AgentNetwork />
           </ScrollControls>

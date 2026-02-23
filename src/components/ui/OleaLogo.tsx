@@ -1,21 +1,20 @@
 export function OleaLogo({ className = "w-6 h-6" }: { className?: string }) {
+  // SVG representation of a stylized olive tree based on the LinkedIn logo
   return (
     <svg 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="1" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
+      viewBox="0 0 100 100" 
+      fill="currentColor" 
       className={className}
     >
-      {/* Minimalist Olive Tree */}
-      <path d="M12 22v-8" />
-      <path d="M12 14c-3-2-5-5-5-8 0-2 1.5-3 3-3 2 0 3.5 2 4 4" />
-      <path d="M12 14c3-2 5-5 5-8 0-2-1.5-3-3-3-2 0-3.5 2-4 4" />
-      <circle cx="10" cy="6" r="1" fill="currentColor" stroke="none" />
-      <circle cx="14" cy="8" r="1" fill="currentColor" stroke="none" />
-      <circle cx="12" cy="4" r="1" fill="currentColor" stroke="none" />
+      <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M50 75v-35" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      <path d="M50 60c-15-15-20-25-15-35 5 10 15 15 15 15" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      <path d="M50 60c15-15 20-25 15-35-5 10-15 15-15 15" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="35" cy="25" r="4" fill="currentColor" />
+      <circle cx="65" cy="25" r="4" fill="currentColor" />
+      <circle cx="50" cy="20" r="4" fill="currentColor" />
+      <circle cx="42" cy="35" r="3" fill="currentColor" />
+      <circle cx="58" cy="35" r="3" fill="currentColor" />
     </svg>
   );
 }
