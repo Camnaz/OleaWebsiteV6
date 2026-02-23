@@ -1,9 +1,11 @@
 import { ReactNode } from "react";
 import { Navigation } from "./Navigation";
+import { CustomCursor } from "./CustomCursor";
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="relative min-h-screen bg-white text-black overflow-hidden selection:bg-gray-200 selection:text-black">
+      <CustomCursor />
       <Navigation />
       <main className="relative z-10">{children}</main>
       
