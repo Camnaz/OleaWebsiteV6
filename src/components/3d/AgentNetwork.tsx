@@ -7,6 +7,7 @@ import * as THREE from 'three';
 export function AgentNetwork() {
   const group = useRef<THREE.Group>(null);
   const linesRef = useRef<THREE.LineSegments>(null);
+  const pointsRef = useRef<THREE.Points>(null);
   const [scrollY, setScrollY] = useState(0);
   
   useEffect(() => {
@@ -24,13 +25,14 @@ export function AgentNetwork() {
   }, []);
   
   // Create different architectural states for the nodes
-  const { lines, architectures } = useMemo(() => {
+  const { lines, architectures, positions } = useMemo(() => {
     const size = 8; // 8x8x8 grid = 512 nodes
     const spacing = 1.2;
     const offset = (size * spacing) / 2 - (spacing / 2);
     
     const nodeCount = size * size * size;
     
+    const positions = new Float32Array(nodeCount * 3);
     const archCube = new Float32Array(nodeCount * 3);
     const archSphere = new Float32Array(nodeCount * 3);
     const archCylinder = new Float32Array(nodeCount * 3);
@@ -52,6 +54,7 @@ export function AgentNetwork() {
           
           const v = new THREE.Vector3(px, py, pz);
           nodes.push(v);
+          v.toArray(positions, idx * 3);
           
           // 2. Sphere State
           const radius = 6;
@@ -85,6 +88,7 @@ export function AgentNetwork() {
     }
     
     return { 
+      positions,
       lines: lineIndices,
       architectures: [archCube, archSphere, archCylinder]
     };
@@ -93,7 +97,7 @@ export function AgentNetwork() {
   const linePositions = useMemo(() => new Float32Array(lines.length * 6), [lines]);
 
   useFrame((state, delta) => {
-    if (!group.current || !linesRef.current) return;
+    if (!group.current || !linesRef.current || !pointsRef.current) return;
     
     const t = state.clock.elapsedTime;
     const scrollOffset = scrollY; 
@@ -111,6 +115,7 @@ export function AgentNetwork() {
     group.current.position.z = THREE.MathUtils.lerp(group.current.position.z, targetZ, 0.02);
 
     const linePosAttribute = linesRef.current.geometry.attributes.position;
+    const pointPosAttribute = pointsRef.current.geometry.attributes.position;
     
     let archA = architectures[0];
     let archB = architectures[0];
@@ -132,38 +137,61 @@ export function AgentNetwork() {
     
     const easedBlend = blend * blend * (3 - 2 * blend); 
     
-    // Update lines directly, skipping points since we are removing them
+    // First update the points
+    for (let i = 0; i < pointPosAttribute.count; i++) {
+      const idx = i * 3;
+      
+      const targetX = THREE.MathUtils.lerp(archA[idx], archB[idx], easedBlend);
+      const targetY = THREE.MathUtils.lerp(archA[idx + 1], archB[idx + 1], easedBlend);
+      const targetZ = THREE.MathUtils.lerp(archA[idx + 2], archB[idx + 2], easedBlend);
+      
+      const wave = Math.sin(t * 0.2 + targetX * 0.2 + targetY * 0.2) * 0.1;
+      
+      pointPosAttribute.array[idx] += (targetX - pointPosAttribute.array[idx]) * 0.03;
+      pointPosAttribute.array[idx + 1] += (targetY + wave - pointPosAttribute.array[idx + 1]) * 0.03;
+      pointPosAttribute.array[idx + 2] += (targetZ - pointPosAttribute.array[idx + 2]) * 0.03;
+    }
+    pointPosAttribute.needsUpdate = true;
+    
+    // Then update lines to exactly match the points
     for (let i = 0; i < lines.length / 2; i++) {
       const idxA = lines[i * 2] * 3;
       const idxB = lines[i * 2 + 1] * 3;
-      
-      const targetXA = THREE.MathUtils.lerp(archA[idxA], archB[idxA], easedBlend);
-      const targetYA = THREE.MathUtils.lerp(archA[idxA + 1], archB[idxA + 1], easedBlend);
-      const targetZA = THREE.MathUtils.lerp(archA[idxA + 2], archB[idxA + 2], easedBlend);
-      
-      const targetXB = THREE.MathUtils.lerp(archA[idxB], archB[idxB], easedBlend);
-      const targetYB = THREE.MathUtils.lerp(archA[idxB + 1], archB[idxB + 1], easedBlend);
-      const targetZB = THREE.MathUtils.lerp(archA[idxB + 2], archB[idxB + 2], easedBlend);
-      
-      const waveA = Math.sin(t * 0.2 + targetXA * 0.2 + targetYA * 0.2) * 0.1;
-      const waveB = Math.sin(t * 0.2 + targetXB * 0.2 + targetYB * 0.2) * 0.1;
-      
       const lineIdx = i * 6;
       
-      linePosAttribute.array[lineIdx] += (targetXA - linePosAttribute.array[lineIdx]) * 0.03;
-      linePosAttribute.array[lineIdx + 1] += (targetYA + waveA - linePosAttribute.array[lineIdx + 1]) * 0.03;
-      linePosAttribute.array[lineIdx + 2] += (targetZA - linePosAttribute.array[lineIdx + 2]) * 0.03;
+      linePosAttribute.array[lineIdx] = pointPosAttribute.array[idxA];
+      linePosAttribute.array[lineIdx + 1] = pointPosAttribute.array[idxA + 1];
+      linePosAttribute.array[lineIdx + 2] = pointPosAttribute.array[idxA + 2];
       
-      linePosAttribute.array[lineIdx + 3] += (targetXB - linePosAttribute.array[lineIdx + 3]) * 0.03;
-      linePosAttribute.array[lineIdx + 4] += (targetYB + waveB - linePosAttribute.array[lineIdx + 4]) * 0.03;
-      linePosAttribute.array[lineIdx + 5] += (targetZB - linePosAttribute.array[lineIdx + 5]) * 0.03;
+      linePosAttribute.array[lineIdx + 3] = pointPosAttribute.array[idxB];
+      linePosAttribute.array[lineIdx + 4] = pointPosAttribute.array[idxB + 1];
+      linePosAttribute.array[lineIdx + 5] = pointPosAttribute.array[idxB + 2];
     }
-    
     linePosAttribute.needsUpdate = true;
   });
 
   return (
     <group ref={group}>
+      <points ref={pointsRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={positions.length / 3}
+            array={positions}
+            itemSize={3}
+            args={[positions, 3]}
+          />
+        </bufferGeometry>
+        {/* Beautiful, subtle cyan/sky nodes representing agents */}
+        <pointsMaterial 
+          size={0.15} 
+          color="#38bdf8" 
+          transparent 
+          opacity={0.8}
+          sizeAttenuation={true}
+          blending={THREE.AdditiveBlending}
+        />
+      </points>
       <lineSegments ref={linesRef}>
         <bufferGeometry>
           <bufferAttribute
