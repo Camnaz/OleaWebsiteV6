@@ -2,38 +2,48 @@
 
 @theme {
   --color-background: #ffffff;
-  --color-foreground: #000000;
+  --color-foreground: #1a1a1a;
   --color-muted: #f3f4f6;
   --color-muted-foreground: #6b7280;
-  --color-accent: #0f172a;
+  --color-accent: #10B981;
   --color-accent-foreground: #ffffff;
+  --color-titanium: #9CA3AF;
+  --color-titanium-light: #E5E7EB;
+  --color-chlorophyll: #10B981;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, serif;
 }
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --foreground: 0 0% 10%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-  }
-
-  .dark {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --accent: 160 84% 39.4%;
+    --accent-foreground: 0 0% 100%;
   }
 }
 
 @layer base {
   * {
-    border-color: var(--color-gray-200);
+    border-color: var(--color-titanium-light);
     cursor: none !important;
   }
+  html {
+    background-color: #fafafa;
+  }
   body {
-    background-color: var(--color-white);
-    color: var(--color-black);
+    background-color: transparent !important;
+    color: #1a1a1a;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4 {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 300;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    letter-spacing: 0.01em;
   }
 }
 
@@ -47,23 +57,55 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e5e7eb;
+  background: #d1d5db;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d1d5db;
+  background: #9ca3af;
 }
 
 @utility glass {
-  background-color: rgb(255 255 255 / 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgb(255 255 255 / 0.2);
-  box-shadow: var(--shadow-lg);
+  background-color: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 @utility text-gradient {
   background-clip: text;
   color: transparent;
-  background-image: linear-gradient(to right, var(--color-gray-900), var(--color-gray-600), var(--color-gray-400));
+  background-image: linear-gradient(to right, #1a1a1a, #4b5563, #9ca3af);
+}
+
+@keyframes hero-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-hero-gradient {
+  animation: hero-gradient 15s ease infinite;
+  background-size: 200% 200%;
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(156,163,175,0.25) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
 }

@@ -4,98 +4,190 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { ContactPanel } from "./ContactPanel";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  const handleMobileLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // If it's a mailto link, just close and let default happen
+    if (href.startsWith("mailto:")) {
+      setIsMobileMenuOpen(false);
+      return;
+    }
+
+    e.preventDefault();
+    const targetId = href.replace("#", "");
+    const element = document.getElementById(targetId);
+    
+    // Trigger the React state update to close the menu
+    setIsMobileMenuOpen(false);
+    
+    if (element) {
+      // Defer the scroll until after React has processed the unmount and unlocked the body
+      // This prevents the "laggy" UX on mobile where scroll fights with React render
+      setTimeout(() => {
+        const offset = 80;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+      }, 50);
+    }
+  };
+
   const navLinks = [
     { name: "Ecosystem", href: "#products" },
     { name: "Vision", href: "#vision" },
-    { name: "Contact", href: "mailto:hello@oleacomputer.com" },
+    { name: "Contact", href: "#contact" },
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
-        isScrolled ? "bg-white/80 backdrop-blur-xl border-b-[0.5px] border-gray-200 py-4" : "bg-transparent py-8"
-      }`}
-    >
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-3 relative z-50 cursor-none group">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex items-center"
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+          isScrolled 
+            ? "bg-white/40 backdrop-blur-2xl border-b border-gray-200/40 shadow-[0_8px_32px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.6)] py-1.5" 
+            : "bg-white/20 backdrop-blur-lg py-2"
+        }`}
+      >
+        <div className="absolute inset-0 bg-linear-to-b from-white/70 to-transparent pointer-events-none" />
+        
+        <div className="container mx-auto px-6 flex items-center justify-between relative z-10 h-9">
+          <Link href="/" className="flex items-center space-x-3 cursor-none group">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="flex items-center"
+            >
+              <span className="text-xl font-serif tracking-tight text-gray-900 group-hover:text-emerald-600 transition-colors duration-500 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">Olea Computer</span>
+            </motion.div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-10 px-8 py-3">
+            {navLinks.map((link, i) => (
+              <motion.div
+                key={link.name}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: i * 0.1 + 0.1, ease: "easeOut" }}
+              >
+                {link.name === "Contact" ? (
+                  <button
+                    onClick={() => setIsContactOpen(true)}
+                    className="text-[11px] font-sans font-medium tracking-[0.2em] uppercase text-gray-700 hover:text-emerald-600 transition-colors duration-500 cursor-none drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]"
+                  >
+                    {link.name}
+                  </button>
+                ) : (
+                  <Link
+                    href={link.href}
+                    className="text-[11px] font-sans font-medium tracking-[0.2em] uppercase text-gray-700 hover:text-emerald-600 transition-colors duration-500 cursor-none relative group drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]"
+                  >
+                    {link.name}
+                  </Link>
+                )}
+              </motion.div>
+            ))}
+          </nav>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="md:hidden relative z-50 text-gray-700 p-2 cursor-none bg-white/70 backdrop-blur-xl rounded-full border border-gray-200/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_10px_rgba(0,0,0,0.06)]"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
           >
-            <span className="text-xl font-serif italic tracking-wide">Olea Computer</span>
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Navigation (Portaled out of header flow to avoid transform issues) */}
+      <motion.div
+        initial={false}
+        animate={{
+          opacity: isMobileMenuOpen ? 1 : 0,
+          pointerEvents: isMobileMenuOpen ? "auto" : "none",
+        }}
+        className="fixed inset-0 bg-white/95 backdrop-blur-2xl z-60"
+      >
+        <div className="absolute inset-0 bg-linear-to-br from-emerald-50/40 via-gray-50/30 to-transparent pointer-events-none" />
+
+        <div className="absolute top-0 left-0 right-0 z-30 px-6 py-2 flex items-center justify-between border-b border-gray-200/50 bg-white/50 backdrop-blur-xl h-[53px]">
+          <Link
+            href="/"
+            className="text-xl font-serif tracking-tight text-gray-900 cursor-none"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Olea Computer
+          </Link>
+          <button
+            className="text-gray-700 p-2 cursor-none bg-white/70 backdrop-blur-xl rounded-full border border-gray-200/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_10px_rgba(0,0,0,0.06)]"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="relative z-10 h-full w-full flex flex-col items-center justify-center space-y-12 pt-24 pointer-events-none">
+        
+        {navLinks.map((link, i) => (
+          <motion.div
+            key={link.name}
+            initial={{ opacity: 0, y: 20 }}
+            animate={isMobileMenuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, delay: isMobileMenuOpen ? i * 0.1 : 0, ease: "easeOut" }}
+            className="relative z-10 pointer-events-auto"
+          >
+            {link.name === "Contact" ? (
+              <button
+                className="text-2xl font-sans font-medium tracking-[0.2em] uppercase text-gray-800 cursor-none hover:text-emerald-600 transition-colors duration-300 relative z-10"
+                onClick={() => { setIsMobileMenuOpen(false); setIsContactOpen(true); }}
+              >
+                {link.name}
+              </button>
+            ) : (
+              <a
+                href={link.href}
+                className="text-2xl font-sans font-medium tracking-[0.2em] uppercase text-gray-800 cursor-none hover:text-emerald-600 transition-colors duration-300 relative z-10"
+                onClick={(e) => handleMobileLinkClick(e, link.href)}
+              >
+                {link.name}
+              </a>
+            )}
           </motion.div>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-12">
-          {navLinks.map((link, i) => (
-            <motion.div
-              key={link.name}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: i * 0.1 + 0.2, ease: "easeOut" }}
-            >
-              <Link
-                href={link.href}
-                className="text-xs font-sans font-light tracking-[0.2em] uppercase text-gray-400 hover:text-black transition-colors duration-500 cursor-none"
-              >
-                {link.name}
-              </Link>
-            </motion.div>
-          ))}
-        </nav>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden relative z-50 text-black p-2 cursor-none"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? <X size={24} className="font-light" /> : <Menu size={24} className="font-light" />}
-        </button>
-
-        {/* Mobile Navigation */}
-        <motion.div
-          initial={false}
-          animate={{
-            opacity: isMobileMenuOpen ? 1 : 0,
-            pointerEvents: isMobileMenuOpen ? "auto" : "none",
-          }}
-          className="fixed inset-0 bg-white/95 backdrop-blur-3xl z-40 flex flex-col items-center justify-center space-y-12"
-        >
-          {navLinks.map((link, i) => (
-            <motion.div
-              key={link.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isMobileMenuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, delay: isMobileMenuOpen ? i * 0.1 : 0, ease: "easeOut" }}
-            >
-              <Link
-                href={link.href}
-                className="text-2xl font-sans font-light tracking-[0.3em] uppercase text-black cursor-none hover:opacity-50 transition-opacity duration-300"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </header>
+        ))}
+        </div>
+      </motion.div>
+      <ContactPanel isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+    </>
   );
 }

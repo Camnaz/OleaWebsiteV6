@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Playfair_Display } from "next/font/google";
+import { IBM_Plex_Sans, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const spaceGrotesk = Space_Grotesk({ 
+const ibmPlexSans = IBM_Plex_Sans({ 
   subsets: ["latin"], 
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-space"
 });
 
-const playfair = Playfair_Display({ 
+const sourceSerif4 = Source_Serif_4({ 
   subsets: ["latin"], 
+  weight: ["200", "300", "400", "600"],
   style: ["normal", "italic"],
   variable: "--font-playfair"
 });
@@ -28,10 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={cn(
-        spaceGrotesk.variable,
-        playfair.variable,
-        spaceGrotesk.className,
-        "antialiased min-h-screen flex flex-col bg-white text-black selection:bg-gray-200 selection:text-black"
+        ibmPlexSans.variable,
+        sourceSerif4.variable,
+        ibmPlexSans.className,
+        "antialiased min-h-screen flex flex-col text-black selection:bg-gray-200 selection:text-black"
       )}>
         {children}
       </body>
