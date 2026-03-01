@@ -2,34 +2,50 @@
 
 import { useEffect, useRef } from "react";
 
+interface DocRect {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
+
 export function DotGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const scrollRef = useRef(0);
   const rafRef = useRef<number | null>(null);
-  const textRectsRef = useRef<DOMRect[]>([]);
+  const textRectsRef = useRef<DocRect[]>([]);
 
   // Update text bounding boxes periodically for collision detection
+  // Store them in absolute document coordinates to prevent lagging on scroll
   useEffect(() => {
     const updateRects = () => {
       const elements = document.querySelectorAll('h1, h2, h3, p');
-      const rects: DOMRect[] = [];
+      const rects: DocRect[] = [];
+      const currentScrollY = window.scrollY;
+      const currentScrollX = window.scrollX;
+      
       elements.forEach(el => {
         const rect = el.getBoundingClientRect();
         // Only include visible or near-visible elements with actual size
-        if (rect.width > 20 && rect.height > 10 && rect.top < window.innerHeight + 500 && rect.bottom > -500) {
-          rects.push(rect);
+        if (rect.width > 20 && rect.height > 10) {
+          rects.push({
+            left: rect.left + currentScrollX,
+            right: rect.right + currentScrollX,
+            top: rect.top + currentScrollY,
+            bottom: rect.bottom + currentScrollY
+          });
         }
       });
       textRectsRef.current = rects;
     };
 
-    updateRects();
-    window.addEventListener('scroll', updateRects, { passive: true });
+    // Delay slightly to ensure layout is fully rendered
+    const timeout = setTimeout(updateRects, 100);
     window.addEventListener('resize', updateRects, { passive: true });
-    const interval = setInterval(updateRects, 1000);
+    // Update periodically in case of layout shifts, absolutely NO scroll listener!
+    const interval = setInterval(updateRects, 2000);
 
     return () => {
-      window.removeEventListener('scroll', updateRects);
+      clearTimeout(timeout);
       window.removeEventListener('resize', updateRects);
       clearInterval(interval);
     };
@@ -51,10 +67,6 @@ export function DotGrid() {
       canvas.style.height = `${window.innerHeight}px`;
     };
 
-    const onScroll = () => {
-      scrollRef.current = window.scrollY;
-    };
-
     const isMobile = window.innerWidth < 768;
     const SPACING = isMobile ? 36 : 42;
     
@@ -65,7 +77,10 @@ export function DotGrid() {
       if (!currentTime) currentTime = performance.now();
       
       const time = (currentTime - startTime) / 1000; // time in seconds
-      const scroll = scrollRef.current;
+      
+      // Read perfectly synced scroll position directly in rAF (0 latency, 0 snapping)
+      const scrollY = window.scrollY;
+      const scrollX = window.scrollX;
 
       const w = canvas.width / dpr;
       const h = canvas.height / dpr;
@@ -75,8 +90,10 @@ export function DotGrid() {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Scroll speed modifier - physically moves the grid slightly with scroll for parallax
-      const scrollOffset = scroll * 0.4;
-      const offsetY = scrollOffset % SPACING;
+      const scrollOffset = scrollY * 0.4;
+      
+      // Safe modulo fixes Javascript negative modulo bug on iOS bounce scroll
+      const offsetY = ((scrollOffset % SPACING) + SPACING) % SPACING;
       
       const cols = Math.ceil(w / SPACING) + 2;
       const rows = Math.ceil(h / SPACING) + 2;
@@ -106,7 +123,7 @@ export function DotGrid() {
           const waveFreqX = 0.0035;
           const waveFreqY = 0.0045;
           const timePhase = time * 0.9;
-          const scrollPhase = scroll * 0.0025;
+          const scrollPhase = scrollY * 0.0025;
           
           const phase1 = (screenX * waveFreqX) + (worldY * waveFreqY) - timePhase - scrollPhase;
           const phase2 = (screenX * waveFreqX * 1.5) - (worldY * waveFreqY * 0.8) + (timePhase * 0.6);
@@ -139,13 +156,20 @@ export function DotGrid() {
           let textMaskAlpha = 1.0;
           for (let i = 0; i < textRectsRef.current.length; i++) {
             const rect = textRectsRef.current[i];
+            
+            // Convert document-relative back to screen-relative purely for this specific frame
+            const rectLeft = rect.left - scrollX;
+            const rectRight = rect.right - scrollX;
+            const rectTop = rect.top - scrollY;
+            const rectBottom = rect.bottom - scrollY;
+            
             const padding = 24; 
             
             if (
-              finalX > rect.left - padding && 
-              finalX < rect.right + padding && 
-              finalY > rect.top - padding && 
-              finalY < rect.bottom + padding
+              finalX > rectLeft - padding && 
+              finalX < rectRight + padding && 
+              finalY > rectTop - padding && 
+              finalY < rectBottom + padding
             ) {
               textMaskAlpha = 0.08; // Drop opacity heavily if underneath text
               break;
@@ -171,13 +195,11 @@ export function DotGrid() {
 
     resize();
     window.addEventListener("resize", resize, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
 
     rafRef.current = requestAnimationFrame(draw);
 
     return () => {
       window.removeEventListener("resize", resize);
-      window.removeEventListener("scroll", onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
