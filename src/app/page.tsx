@@ -30,7 +30,7 @@ export default function Home() {
           </div>
 
           <motion.div 
-            style={{ opacity, scale, y }}
+            style={{ opacity, scale, y, willChange: "transform, opacity" }}
             className="container mx-auto px-6 lg:px-12 relative z-10 flex flex-col h-full justify-center items-start text-left"
           >
             <motion.div
