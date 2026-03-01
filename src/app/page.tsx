@@ -34,8 +34,8 @@ export default function Home() {
             className="container mx-auto px-6 lg:px-12 relative z-10 flex flex-col h-full justify-center items-start text-left"
           >
             <motion.div
-              initial={{ opacity: 0, , y: 40 }}
-              animate={{ opacity: 1, , y: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-3xl relative z-20"
             >
@@ -134,8 +134,8 @@ export default function Home() {
                 return (
                   <motion.div
                     key={feature.title}
-                    initial={{ opacity: 0, , y: 80 }}
-                    whileInView={{ opacity: 1, , y: 0 }}
+                    initial={{ opacity: 0, y: 80 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-20%" }}
                     transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
                     className={`flex flex-col max-w-xs ${align} group`}
