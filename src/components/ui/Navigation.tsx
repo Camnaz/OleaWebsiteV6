@@ -72,8 +72,8 @@ export function Navigation() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
           isScrolled 
-            ? "bg-white/40 backdrop-blur-2xl border-b border-gray-200/40 shadow-[0_8px_32px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.6)] py-1.5" 
-            : "bg-white/20 backdrop-blur-lg py-2"
+            ? "bg-white/40 backdrop-blur-2xl border-b border-gray-200/40 shadow-[0_8px_32px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.6)] py-[10px]" 
+            : "bg-white/20 backdrop-blur-lg py-[14px]"
         }`}
       >
         <div className="absolute inset-0 bg-linear-to-b from-white/70 to-transparent pointer-events-none" />
@@ -83,7 +83,7 @@ export function Navigation() {
             href="#" 
             onClick={(e) => {
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.scrollTo({ top: 0 }); // Immediate scroll prevents framerate lag that occurs when combining JS smoothscroll with CSS scroll-smooth
             }}
             className="flex items-center space-x-3 cursor-none group"
           >
@@ -147,25 +147,29 @@ export function Navigation() {
       >
         <div className="absolute inset-0 bg-linear-to-br from-emerald-50/40 via-gray-50/30 to-transparent pointer-events-none" />
 
-        <div className="absolute top-0 left-0 right-0 z-30 px-6 py-2 flex items-center justify-between border-b border-gray-200/50 bg-white/50 backdrop-blur-xl h-[53px]">
-          <a
-            href="#"
-            className="text-xl font-serif tracking-tight text-gray-900 cursor-none"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsMobileMenuOpen(false);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          >
-            Olea Computer
-          </a>
-          <button
-            className="text-gray-700 p-2 cursor-none bg-white/70 backdrop-blur-xl rounded-full border border-gray-200/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_10px_rgba(0,0,0,0.06)]"
-            onClick={() => setIsMobileMenuOpen(false)}
-            aria-label="Close menu"
-          >
-            <X size={20} />
-          </button>
+        <div className="absolute top-0 left-0 right-0 z-30 py-[14px]">
+          <div className="container mx-auto px-6 flex items-center justify-between h-9">
+            <a
+              href="#"
+              className="flex items-center space-x-3 cursor-none"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsMobileMenuOpen(false);
+                window.scrollTo({ top: 0 });
+              }}
+            >
+              <div className="flex items-center">
+                <span className="text-xl font-serif tracking-tight text-gray-900 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">Olea Computer</span>
+              </div>
+            </a>
+            <button
+              className="text-gray-700 p-2 cursor-none bg-white/70 backdrop-blur-xl rounded-full border border-gray-200/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_10px_rgba(0,0,0,0.06)]"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         <div className="relative z-10 h-full w-full flex flex-col items-center justify-center space-y-12 pt-24 pointer-events-none">

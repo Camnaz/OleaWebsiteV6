@@ -34,8 +34,8 @@ export default function Home() {
             className="container mx-auto px-6 lg:px-12 relative z-10 flex flex-col h-full justify-center items-start text-left"
           >
             <motion.div
-              initial={{ opacity: 0, filter: "blur(10px)", y: 40 }}
-              animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+              initial={{ opacity: 0, , y: 40 }}
+              animate={{ opacity: 1, , y: 0 }}
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-3xl relative z-20"
             >
@@ -53,7 +53,7 @@ export default function Home() {
                 <SpotlightButton href="#products" color="emerald" className="inline-flex items-center justify-between px-8 py-4 border border-emerald-300/40 bg-white/30 backdrop-blur-xl text-emerald-800 text-[10px] font-sans font-normal tracking-[0.2em] uppercase transition-all duration-700 cursor-none rounded-full group shadow-[0_8px_32px_rgba(16,185,129,0.05),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_4px_rgba(0,0,0,0.02)] hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(16,185,129,0.12),inset_0_2px_4px_rgba(255,255,255,1)] hover:px-10 hover:-translate-y-1 z-30 relative">
                   <span className="relative z-10 flex items-center gap-4 pointer-events-none">
                     Explore Ecosystem
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-2 transition-transform duration-500 text-emerald-600" />
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-2 transition-transform will-change-transform duration-500 text-emerald-600" />
                   </span>
                 </SpotlightButton>
                 <SpotlightButton href="#vision" color="sky" className="inline-flex items-center justify-between px-8 py-4 border border-teal-300/30 bg-white/20 backdrop-blur-xl text-teal-700 text-[10px] font-sans font-normal tracking-[0.2em] uppercase transition-all duration-700 cursor-none rounded-full group shadow-[0_8px_32px_rgba(45,212,191,0.04),inset_0_2px_4px_rgba(255,255,255,0.7),inset_0_-2px_4px_rgba(0,0,0,0.015)] hover:bg-white/35 hover:shadow-[0_12px_40px_rgba(45,212,191,0.08),inset_0_2px_4px_rgba(255,255,255,1)] hover:px-10 hover:-translate-y-1 z-30 relative">
@@ -76,8 +76,8 @@ export default function Home() {
           <div className="container mx-auto px-6">
             <div className="max-w-xl mx-auto text-center mb-20">
               <motion.h2 
-                initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
-                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                initial={{ opacity: 0, y: 30,  }}
+                whileInView={{ opacity: 1, y: 0,  }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                 className="text-2xl md:text-3xl font-serif tracking-[-0.02em] mb-8 text-gray-900"
@@ -134,13 +134,13 @@ export default function Home() {
                 return (
                   <motion.div
                     key={feature.title}
-                    initial={{ opacity: 0, filter: "blur(15px)", y: 80 }}
-                    whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                    initial={{ opacity: 0, , y: 80 }}
+                    whileInView={{ opacity: 1, , y: 0 }}
                     viewport={{ once: true, margin: "-20%" }}
                     transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
                     className={`flex flex-col max-w-xs ${align} group`}
                   >
-                    <div className={`mb-10 p-6 rounded-4xl bg-white/40 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_4px_rgba(0,0,0,0.02)] inline-flex ${selfAlign} relative overflow-hidden transition-transform duration-700 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(16,185,129,0.08),inset_0_2px_4px_rgba(255,255,255,1)]`}>
+                    <div className={`mb-10 p-6 rounded-4xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_4px_rgba(0,0,0,0.02)] inline-flex ${selfAlign} relative overflow-hidden transition-transform will-change-transform duration-700 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(16,185,129,0.08),inset_0_2px_4px_rgba(255,255,255,1)]`}>
                       <div className="absolute inset-0 bg-linear-to-br from-white/80 to-transparent pointer-events-none" />
                       {feature.icon}
                     </div>
@@ -205,7 +205,7 @@ export default function Home() {
                     
                     <div className="flex flex-wrap gap-3 mt-12">
                       {["Agent Discovery", "8004 Standard Support", "Reputation Tracking", "API Integration"].map((item) => (
-                        <div key={item} className="flex items-center text-gray-700 text-xs font-sans font-bold tracking-widest uppercase bg-white/40 backdrop-blur-2xl rounded-2xl p-3 md:px-5 border border-white/60 shadow-[0_4px_15px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.9),inset_0_-1px_2px_rgba(0,0,0,0.02)] transition-transform hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(16,185,129,0.08),inset_0_1px_1px_rgba(255,255,255,1)]">
+                        <div key={item} className="flex items-center text-gray-700 text-xs font-sans font-bold tracking-widest uppercase bg-white/40 backdrop-blur-xl rounded-2xl p-3 md:px-5 border border-white/60 shadow-[0_4px_15px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.9),inset_0_-1px_2px_rgba(0,0,0,0.02)] transition-transform will-change-transform hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(16,185,129,0.08),inset_0_1px_1px_rgba(255,255,255,1)]">
                           <div className="w-1.5 h-1.5 bg-emerald-500 mr-3 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
                           {item}
                         </div>
@@ -222,7 +222,7 @@ export default function Home() {
                       >
                         <span className="relative z-10 flex items-center justify-between w-full pointer-events-none">
                           Visit XILO
-                          <ArrowRight className="w-3.5 h-3.5 ml-4 group-hover/btn:translate-x-2 transition-transform duration-500 text-emerald-600" />
+                          <ArrowRight className="w-3.5 h-3.5 ml-4 group-hover/btn:translate-x-2 transition-transform will-change-transform duration-500 text-emerald-600" />
                         </span>
                       </SpotlightButton>
                     </div>
@@ -230,11 +230,11 @@ export default function Home() {
 
                   <div className="flex-1 relative w-full">
                     <div className="aspect-square relative max-w-xl mx-auto group">
-                      <div className="absolute inset-0 bg-linear-to-tr from-emerald-100/50 to-teal-50/40 rounded-[3rem] transform rotate-3 scale-105 transition-transform duration-700 group-hover:rotate-6 group-hover:scale-110 blur-xl opacity-70" />
-                      <div className="relative h-full w-full bg-white/40 backdrop-blur-2xl border border-white/60 shadow-[0_20px_60px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.9),-4px_-4px_12px_rgba(255,255,255,0.6)] rounded-[3rem] flex items-center justify-center overflow-hidden transition-transform duration-1000 group-hover:-translate-y-4">
+                      <div className="absolute inset-0 bg-linear-to-tr from-emerald-100/50 to-teal-50/40 rounded-[3rem] transform rotate-3 scale-105 transition-transform will-change-transform duration-700 group-hover:rotate-6 group-hover:scale-110 blur-xl opacity-70" />
+                      <div className="relative h-full w-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_20px_60px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.9),-4px_-4px_12px_rgba(255,255,255,0.6)] rounded-[3rem] flex items-center justify-center overflow-hidden transition-transform will-change-transform duration-700 group-hover:-translate-y-4">
                         <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-200/30 rounded-full blur-2xl -mr-16 -mt-16 transition-all duration-700 group-hover:scale-150 group-hover:bg-emerald-100/50" />
                         <div className="absolute bottom-0 left-0 w-48 h-48 bg-gray-200/30 rounded-full blur-2xl -ml-16 -mb-16 transition-all duration-700 group-hover:scale-150 group-hover:bg-gray-100/50" />
-                        <Database className="w-24 h-24 md:w-32 md:h-32 stroke-1 text-emerald-900/40 drop-shadow-sm group-hover:scale-110 transition-transform duration-1000 relative z-10" />
+                        <Database className="w-24 h-24 md:w-32 md:h-32 stroke-1 text-emerald-900/40 drop-shadow-sm group-hover:scale-110 transition-transform will-change-transform duration-700 relative z-10" />
                       </div>
                     </div>
                   </div>
@@ -263,7 +263,7 @@ export default function Home() {
                     
                     <div className="flex flex-wrap gap-3 mt-12">
                       {["Parallel Execution", "Low Gas Costs", "EVM Compatible", "Immutable Finality"].map((item) => (
-                        <div key={item} className="flex items-center text-gray-700 text-xs font-sans font-bold tracking-widest uppercase bg-white/40 backdrop-blur-2xl rounded-2xl p-3 md:px-5 border border-white/60 shadow-[0_4px_15px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.9),inset_0_-1px_2px_rgba(0,0,0,0.02)] transition-transform hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(45,212,191,0.08),inset_0_1px_1px_rgba(255,255,255,1)]">
+                        <div key={item} className="flex items-center text-gray-700 text-xs font-sans font-bold tracking-widest uppercase bg-white/40 backdrop-blur-xl rounded-2xl p-3 md:px-5 border border-white/60 shadow-[0_4px_15px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.9),inset_0_-1px_2px_rgba(0,0,0,0.02)] transition-transform will-change-transform hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(45,212,191,0.08),inset_0_1px_1px_rgba(255,255,255,1)]">
                           <div className="w-1.5 h-1.5 bg-teal-500 mr-3 rounded-full shadow-[0_0_8px_rgba(45,212,191,0.8)]"></div>
                           {item}
                         </div>
@@ -280,7 +280,7 @@ export default function Home() {
                       >
                         <span className="relative z-10 flex items-center justify-between w-full pointer-events-none">
                           Explore Sylva
-                          <ArrowRight className="w-3.5 h-3.5 ml-4 group-hover/btn:translate-x-2 transition-transform duration-500 text-teal-600" />
+                          <ArrowRight className="w-3.5 h-3.5 ml-4 group-hover/btn:translate-x-2 transition-transform will-change-transform duration-500 text-teal-600" />
                         </span>
                       </SpotlightButton>
                     </div>
@@ -288,9 +288,9 @@ export default function Home() {
 
                   <div className="flex-1 w-full relative">
                     <div className="aspect-square relative max-w-xl mx-auto group">
-                      <div className="absolute inset-0 bg-linear-to-tr from-teal-100/40 via-emerald-50/30 to-gray-100/30 rounded-[3rem] transform -rotate-3 scale-105 opacity-70 blur-2xl group-hover:-rotate-6 group-hover:scale-110 transition-all duration-1000" />
-                      <div className="relative h-full w-full bg-white/40 backdrop-blur-2xl border border-white/60 shadow-[0_20px_60px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.9),-4px_-4px_12px_rgba(255,255,255,0.6)] rounded-[3rem] flex items-center justify-center overflow-hidden transition-transform duration-1000 group-hover:-translate-y-4">
-                        <Layers className="w-24 h-24 md:w-32 md:h-32 stroke-1 text-teal-900/40 drop-shadow-sm group-hover:scale-110 transition-transform duration-1000 relative z-10" />
+                      <div className="absolute inset-0 bg-linear-to-tr from-teal-100/40 via-emerald-50/30 to-gray-100/30 rounded-[3rem] transform -rotate-3 scale-105 opacity-70 blur-2xl group-hover:-rotate-6 group-hover:scale-110 transition-all duration-700" />
+                      <div className="relative h-full w-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_20px_60px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.9),-4px_-4px_12px_rgba(255,255,255,0.6)] rounded-[3rem] flex items-center justify-center overflow-hidden transition-transform will-change-transform duration-700 group-hover:-translate-y-4">
+                        <Layers className="w-24 h-24 md:w-32 md:h-32 stroke-1 text-teal-900/40 drop-shadow-sm group-hover:scale-110 transition-transform will-change-transform duration-700 relative z-10" />
                         <div className="absolute top-10 left-10 w-32 h-32 bg-teal-200/30 rounded-full blur-2xl transition-all duration-700 group-hover:scale-150" />
                         <div className="absolute bottom-10 right-10 w-32 h-32 bg-gray-200/30 rounded-full blur-2xl transition-all duration-700 group-hover:scale-150" />
                       </div>
