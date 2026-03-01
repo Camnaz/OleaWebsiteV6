@@ -79,7 +79,14 @@ export function Navigation() {
         <div className="absolute inset-0 bg-linear-to-b from-white/70 to-transparent pointer-events-none" />
         
         <div className="container mx-auto px-6 flex items-center justify-between relative z-10 h-9">
-          <Link href="/" className="flex items-center space-x-3 cursor-none group">
+          <a 
+            href="#" 
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="flex items-center space-x-3 cursor-none group"
+          >
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -88,7 +95,7 @@ export function Navigation() {
             >
               <span className="text-xl font-serif tracking-tight text-gray-900 group-hover:text-emerald-600 transition-colors duration-500 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">Olea Computer</span>
             </motion.div>
-          </Link>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-10 px-8 py-3">
@@ -141,13 +148,17 @@ export function Navigation() {
         <div className="absolute inset-0 bg-linear-to-br from-emerald-50/40 via-gray-50/30 to-transparent pointer-events-none" />
 
         <div className="absolute top-0 left-0 right-0 z-30 px-6 py-2 flex items-center justify-between border-b border-gray-200/50 bg-white/50 backdrop-blur-xl h-[53px]">
-          <Link
-            href="/"
+          <a
+            href="#"
             className="text-xl font-serif tracking-tight text-gray-900 cursor-none"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              setIsMobileMenuOpen(false);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           >
             Olea Computer
-          </Link>
+          </a>
           <button
             className="text-gray-700 p-2 cursor-none bg-white/70 backdrop-blur-xl rounded-full border border-gray-200/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_10px_rgba(0,0,0,0.06)]"
             onClick={() => setIsMobileMenuOpen(false)}
