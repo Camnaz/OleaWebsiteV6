@@ -55,7 +55,7 @@ export function Navigation() {
 
         window.scrollTo({
           top: offsetPosition,
-          behavior: "smooth"
+          behavior: "auto"
         });
       }, 50);
     }
