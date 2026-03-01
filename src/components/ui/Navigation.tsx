@@ -31,7 +31,7 @@ export function Navigation() {
     };
   }, [isMobileMenuOpen]);
 
-  const handleMobileLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     // If it's a mailto link, just close and let default happen
     if (href.startsWith("mailto:")) {
       setIsMobileMenuOpen(false);
@@ -114,12 +114,12 @@ export function Navigation() {
                     {link.name}
                   </button>
                 ) : (
-                  <Link
-                    href={link.href}
+                  <a
+                    href={link.href} onClick={(e) => handleLinkClick(e, link.href)}
                     className="text-[11px] font-sans font-medium tracking-[0.2em] uppercase text-gray-700 hover:text-emerald-600 transition-colors duration-500 cursor-none relative group drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]"
                   >
                     {link.name}
-                  </Link>
+                  </a>
                 )}
               </motion.div>
             ))}
@@ -191,9 +191,8 @@ export function Navigation() {
               </button>
             ) : (
               <a
-                href={link.href}
+                href={link.href} onClick={(e) => handleLinkClick(e, link.href)}
                 className="text-2xl font-sans font-medium tracking-[0.2em] uppercase text-gray-800 cursor-none hover:text-emerald-600 transition-colors duration-300 relative z-10"
-                onClick={(e) => handleMobileLinkClick(e, link.href)}
               >
                 {link.name}
               </a>

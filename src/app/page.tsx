@@ -13,9 +13,9 @@ export default function Home() {
     offset: ["start start", "end end"]
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
-  const y = useTransform(scrollYProgress, [0, 0.15], [0, 50]);
+  const opacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.25], [1, 0.95]);
+  const y = useTransform(scrollYProgress, [0, 0.25], [0, 50]);
 
   return (
     <Layout>
