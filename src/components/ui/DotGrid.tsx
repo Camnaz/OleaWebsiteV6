@@ -2,73 +2,38 @@
 
 import { useEffect, useRef } from "react";
 
-interface DocRect {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-}
-
 export function DotGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number | null>(null);
-  const textRectsRef = useRef<DocRect[]>([]);
-
-  // Update text bounding boxes periodically for collision detection
-  // Store them in absolute document coordinates to prevent lagging on scroll
-  useEffect(() => {
-    const updateRects = () => {
-      const elements = document.querySelectorAll('h1, h2, h3, p');
-      const rects: DocRect[] = [];
-      const currentScrollY = window.scrollY;
-      const currentScrollX = window.scrollX;
-      
-      elements.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        // Only include visible or near-visible elements with actual size
-        if (rect.width > 20 && rect.height > 10) {
-          rects.push({
-            left: rect.left + currentScrollX,
-            right: rect.right + currentScrollX,
-            top: rect.top + currentScrollY,
-            bottom: rect.bottom + currentScrollY
-          });
-        }
-      });
-      textRectsRef.current = rects;
-    };
-
-    // Delay slightly to ensure layout is fully rendered
-    const timeout = setTimeout(updateRects, 100);
-    window.addEventListener('resize', updateRects, { passive: true });
-    // Update periodically in case of layout shifts, absolutely NO scroll listener!
-    const interval = setInterval(updateRects, 2000);
-
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener('resize', updateRects);
-      clearInterval(interval);
-    };
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d", { alpha: false }); // Use false for better performance, we manually clear with fillRect
+    const ctx = canvas.getContext("2d", { alpha: false }); 
     if (!ctx) return;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let lastWidth = window.innerWidth;
 
     const resize = () => {
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
+      const currentWidth = window.innerWidth;
+      const currentHeight = window.innerHeight;
+      
+      // On mobile, ignore vertical-only resizes (address bar hide/show) to prevent layout thrashing
+      if (currentWidth < 768 && currentWidth === lastWidth && canvas.width > 0) {
+        return;
+      }
+      lastWidth = currentWidth;
+
+      canvas.width = currentWidth * dpr;
+      canvas.height = currentHeight * dpr;
+      canvas.style.width = `${currentWidth}px`;
+      canvas.style.height = `${currentHeight}px`;
     };
 
     const isMobile = window.innerWidth < 768;
-    const SPACING = isMobile ? 36 : 42;
+    const SPACING = isMobile ? 32 : 36;
     
     // Time tracking
     const startTime = performance.now();
@@ -80,17 +45,16 @@ export function DotGrid() {
       
       // Read perfectly synced scroll position directly in rAF (0 latency, 0 snapping)
       const scrollY = window.scrollY;
-      const scrollX = window.scrollX;
 
       const w = canvas.width / dpr;
       const h = canvas.height / dpr;
 
       // Clear with background color
-      ctx.fillStyle = "#fafafa";
+      ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Scroll speed modifier - physically moves the grid slightly with scroll for parallax
-      const scrollOffset = scrollY * 0.4;
+      const scrollOffset = scrollY * 0.15; // Slowed down from 0.4 for less distraction
       
       // Safe modulo fixes Javascript negative modulo bug on iOS bounce scroll
       const offsetY = ((scrollOffset % SPACING) + SPACING) % SPACING;
@@ -116,76 +80,56 @@ export function DotGrid() {
           const dxC = screenX - cx;
           const dyC = screenY - cy;
           const distFromCenter = Math.sqrt(dxC * dxC + dyC * dyC);
-          const radialFade = Math.max(0.3, 1 - (distFromCenter / (maxDist * 1.5)));
+          const radialFade = Math.max(0.4, 1 - (distFromCenter / (maxDist * 1.8)));
 
           // --- Sweeping Wave Pattern ---
           // Creates a large, sweeping diagonal wave that travels across the grid
-          const waveFreqX = 0.0035;
-          const waveFreqY = 0.0045;
-          const timePhase = time * 0.9;
-          const scrollPhase = scrollY * 0.0025;
+          const waveFreqX = 0.002; // Slower wave frequency
+          const waveFreqY = 0.003;
+          const timePhase = time * 0.3; // Slower time evolution
+          const scrollPhase = scrollY * 0.001; // Slower scroll evolution
           
           const phase1 = (screenX * waveFreqX) + (worldY * waveFreqY) - timePhase - scrollPhase;
-          const phase2 = (screenX * waveFreqX * 1.5) - (worldY * waveFreqY * 0.8) + (timePhase * 0.6);
+          const phase2 = (screenX * waveFreqX * 1.5) - (worldY * waveFreqY * 0.8) + (timePhase * 0.4);
           
           // Combine waves and normalize to 0..1
-          // Stronger pronounced peaks
           let pulse = (Math.sin(phase1) + Math.cos(phase2)) * 0.5 + 0.5;
           
           // Sharpen the wave peaks to make the pattern more distinct
-          pulse = Math.pow(pulse, 1.8);
+          pulse = Math.pow(pulse, 2.5);
 
-          // Physical wave displacement (dots physically move slightly in sine waves, more prominent now)
-          const dispX = Math.sin(phase1) * 12;
-          const dispY = Math.cos(phase1) * 12;
+          // Physical wave displacement (dots physically move slightly in sine waves)
+          const dispX = Math.sin(phase1) * 6; // Reduced displacement even further
+          const dispY = Math.cos(phase1) * 6;
           
           const finalX = screenX + dispX;
           const finalY = screenY + dispY;
 
-          // Pulse drives size and alpha - Reduced max size further
-          const dotSize = 1.0 + (pulse * 1.4); // size 1.0px to 2.4px
-          const finalAlpha = 0.20 + (pulse * 0.80); // Greater contrast: alpha 20% to 100%
+          // Pulse drives size and alpha - Tone down overall size heavily on mobile
+          const baseSize = isMobile ? 0.5 : 0.6;
+          // Drastically cap max pulse size to avoid large distracting dots
+          const sizePulse = isMobile ? 0.3 : 0.5;
+          
+          const dotSize = baseSize + (pulse * sizePulse); 
+          const finalAlpha = 0.05 + (pulse * 0.20); // Very subtle alpha range to stay in background
 
           // Apply radial fade
           const alphaWithFade = finalAlpha * radialFade;
 
           // Optimization: skip drawing invisible dots
-          if (alphaWithFade < 0.05) continue;
+          if (alphaWithFade < 0.02) continue;
 
-          // Text Collision Mask
-          let textMaskAlpha = 1.0;
-          for (let i = 0; i < textRectsRef.current.length; i++) {
-            const rect = textRectsRef.current[i];
-            
-            // Convert document-relative back to screen-relative purely for this specific frame
-            const rectLeft = rect.left - scrollX;
-            const rectRight = rect.right - scrollX;
-            const rectTop = rect.top - scrollY;
-            const rectBottom = rect.bottom - scrollY;
-            
-            const padding = 24; 
-            
-            if (
-              finalX > rectLeft - padding && 
-              finalX < rectRight + padding && 
-              finalY > rectTop - padding && 
-              finalY < rectBottom + padding
-            ) {
-              textMaskAlpha = 0.08; // Drop opacity heavily if underneath text
-              break;
-            }
-          }
-
-          if (textMaskAlpha < 0.1) continue;
-
-          // Color palette: Emerald/Teal hue (165)
-          const hue = 165;
-          const sat = 55; // Higher saturation
-          const light = 55 + (pulse * 15); // Brighter peaks
-
+          // Color palette: Silver/Metal/White & Black instead of teals and emeralds
+          // Base: soft silver/titanium (mostly desaturated)
+          // Peak: dark grey/black
+          
+          const hue = 210; // Slate/Silver hue
+          const sat = 10; // Very low saturation
+          const light = 70 - (pulse * 50); // Interpolate from light silver (70%) down to dark charcoal (20%)
+          
           ctx.beginPath();
           ctx.arc(finalX * dpr, finalY * dpr, dotSize * dpr, 0, Math.PI * 2);
-          ctx.fillStyle = `hsla(${hue}, ${sat}%, ${light}%, ${(alphaWithFade * textMaskAlpha).toFixed(2)})`;
+          ctx.fillStyle = `hsla(${hue}, ${sat}%, ${light}%, ${alphaWithFade.toFixed(2)})`;
           ctx.fill();
         }
       }

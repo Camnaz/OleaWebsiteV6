@@ -55,9 +55,9 @@ export function Navigation() {
 
         window.scrollTo({
           top: offsetPosition,
-          behavior: "auto"
+          behavior: "smooth"
         });
-      }, 50);
+      }, 100);
     }
   };
 
@@ -70,22 +70,22 @@ export function Navigation() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+        className={`fixed top-0 left-0 right-0 z-70 transition-all duration-700 ${
           isScrolled 
-            ? "bg-white/40 backdrop-blur-2xl border-b border-gray-200/40 shadow-[0_8px_32px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.6)] py-[10px]" 
-            : "bg-white/20 backdrop-blur-lg py-[14px]"
+            ? "bg-white/70 backdrop-blur-2xl border-b border-gray-200/60 shadow-[0_8px_32px_rgba(0,0,0,0.02),inset_0_1px_0_rgba(255,255,255,0.8)] py-4" 
+            : "bg-white/40 backdrop-blur-xl py-4"
         }`}
       >
-        <div className="absolute inset-0 bg-linear-to-b from-white/70 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-b from-white/90 to-transparent pointer-events-none" />
         
         <div className="container mx-auto px-6 flex items-center justify-between relative z-10 h-9">
           <a 
             href="#" 
             onClick={(e) => {
               e.preventDefault();
-              window.scrollTo({ top: 0 }); // Immediate scroll prevents framerate lag that occurs when combining JS smoothscroll with CSS scroll-smooth
+              window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll back to top
             }}
-            className="flex items-center space-x-3 cursor-none group"
+            className="flex items-center space-x-3 group"
           >
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -93,7 +93,7 @@ export function Navigation() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="flex items-center"
             >
-              <span className="text-xl font-serif tracking-tight text-gray-900 group-hover:text-emerald-600 transition-colors duration-500 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">Olea Computer</span>
+              <span className="text-xl font-serif tracking-tight text-gray-900 group-hover:text-gray-600 transition-colors duration-500 drop-shadow-sm">Olea Computer</span>
             </motion.div>
           </a>
 
@@ -109,14 +109,14 @@ export function Navigation() {
                 {link.name === "Contact" ? (
                   <button
                     onClick={() => setIsContactOpen(true)}
-                    className="text-[11px] font-sans font-medium tracking-[0.2em] uppercase text-gray-700 hover:text-emerald-600 transition-colors duration-500 cursor-none drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]"
+                    className="text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-gray-600 hover:text-gray-900 transition-colors duration-500 drop-shadow-sm"
                   >
                     {link.name}
                   </button>
                 ) : (
                   <a
                     href={link.href} onClick={(e) => handleLinkClick(e, link.href)}
-                    className="text-[11px] font-sans font-medium tracking-[0.2em] uppercase text-gray-700 hover:text-emerald-600 transition-colors duration-500 cursor-none relative group drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]"
+                    className="text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-gray-600 hover:text-gray-900 transition-colors duration-500 relative group drop-shadow-sm"
                   >
                     {link.name}
                   </a>
@@ -127,7 +127,7 @@ export function Navigation() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden relative z-50 text-gray-700 p-2 cursor-none bg-white/70 backdrop-blur-xl rounded-full border border-gray-200/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_10px_rgba(0,0,0,0.06)]"
+            className="md:hidden relative z-50 text-gray-700 p-2 bg-white/90 backdrop-blur-xl rounded-full border border-gray-200/80 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_4px_10px_rgba(0,0,0,0.04)] hover:bg-white transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -136,41 +136,16 @@ export function Navigation() {
         </div>
       </header>
 
-      {/* Mobile Navigation (Portaled out of header flow to avoid transform issues) */}
+      {/* Mobile Navigation */}
       <motion.div
         initial={false}
         animate={{
           opacity: isMobileMenuOpen ? 1 : 0,
           pointerEvents: isMobileMenuOpen ? "auto" : "none",
         }}
-        className="fixed inset-0 bg-white/95 backdrop-blur-2xl z-60"
+        className="fixed inset-0 bg-white/95 backdrop-blur-3xl z-60"
       >
-        <div className="absolute inset-0 bg-linear-to-br from-emerald-50/40 via-gray-50/30 to-transparent pointer-events-none" />
-
-        <div className="absolute top-0 left-0 right-0 z-30 py-[14px]">
-          <div className="container mx-auto px-6 flex items-center justify-between h-9">
-            <a
-              href="#"
-              className="flex items-center space-x-3 cursor-none"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsMobileMenuOpen(false);
-                window.scrollTo({ top: 0 });
-              }}
-            >
-              <div className="flex items-center">
-                <span className="text-xl font-serif tracking-tight text-gray-900 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">Olea Computer</span>
-              </div>
-            </a>
-            <button
-              className="text-gray-700 p-2 cursor-none bg-white/70 backdrop-blur-xl rounded-full border border-gray-200/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),0_4px_10px_rgba(0,0,0,0.06)]"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              <X size={20} />
-            </button>
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.02)_0%,transparent_100%)] pointer-events-none" />
 
         <div className="relative z-10 h-full w-full flex flex-col items-center justify-center space-y-12 pt-24 pointer-events-none">
         
@@ -184,7 +159,7 @@ export function Navigation() {
           >
             {link.name === "Contact" ? (
               <button
-                className="text-2xl font-sans font-medium tracking-[0.2em] uppercase text-gray-800 cursor-none hover:text-emerald-600 transition-colors duration-300 relative z-10"
+                className="text-2xl font-sans font-bold tracking-[0.2em] uppercase text-gray-800 hover:text-gray-500 transition-colors duration-300 relative z-10"
                 onClick={() => { setIsMobileMenuOpen(false); setIsContactOpen(true); }}
               >
                 {link.name}
@@ -192,7 +167,7 @@ export function Navigation() {
             ) : (
               <a
                 href={link.href} onClick={(e) => handleLinkClick(e, link.href)}
-                className="text-2xl font-sans font-medium tracking-[0.2em] uppercase text-gray-800 cursor-none hover:text-emerald-600 transition-colors duration-300 relative z-10"
+                className="text-2xl font-sans font-bold tracking-[0.2em] uppercase text-gray-800 hover:text-gray-500 transition-colors duration-300 relative z-10"
               >
                 {link.name}
               </a>

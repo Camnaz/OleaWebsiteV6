@@ -50,7 +50,7 @@ export function ContactPanel({ isOpen, onClose }: ContactPanelProps) {
   };
 
   const inputClass =
-    "w-full bg-white/50 backdrop-blur-sm border border-gray-200/70 rounded-xl px-4 py-3 text-sm font-sans text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-emerald-400/60 focus:bg-white/70 transition-all duration-300";
+    "w-full bg-white/50 backdrop-blur-sm border border-gray-200/70 rounded-xl px-4 py-3 text-sm font-sans text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gray-400/60 focus:bg-white/70 transition-all duration-300";
 
   return (
     <AnimatePresence>
@@ -102,7 +102,7 @@ export function ContactPanel({ isOpen, onClose }: ContactPanelProps) {
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 18 }}
                     >
-                      <CheckCircle className="w-14 h-14 text-emerald-500 stroke-1" />
+                      <CheckCircle className="w-14 h-14 text-gray-500 stroke-1" />
                     </motion.div>
                     <div>
                       <p className="text-xl font-serif text-gray-900 mb-2">Message sent</p>
@@ -112,7 +112,7 @@ export function ContactPanel({ isOpen, onClose }: ContactPanelProps) {
                     </div>
                     <button
                       onClick={handleClose}
-                      className="mt-4 text-[10px] font-sans tracking-[0.2em] uppercase text-emerald-600 hover:text-emerald-700 transition-colors duration-300 cursor-none border border-emerald-200/60 px-6 py-2.5 rounded-full hover:bg-emerald-50/60"
+                      className="mt-4 text-[10px] font-sans tracking-[0.2em] uppercase text-gray-600 hover:text-gray-700 transition-colors duration-300 cursor-none border border-gray-200/60 px-6 py-2.5 rounded-full hover:bg-gray-50/60"
                     >
                       Close
                     </button>
@@ -185,7 +185,7 @@ export function ContactPanel({ isOpen, onClose }: ContactPanelProps) {
                     <button
                       type="submit"
                       disabled={state === "sending"}
-                      className="mt-2 inline-flex items-center justify-center gap-3 px-8 py-3.5 border border-emerald-300/40 bg-white/30 backdrop-blur-xl text-emerald-800 text-[10px] font-sans tracking-[0.2em] uppercase rounded-full shadow-[0_8px_32px_rgba(16,185,129,0.05),inset_0_2px_4px_rgba(255,255,255,0.8)] hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(16,185,129,0.12)] transition-all duration-500 disabled:opacity-60 disabled:cursor-not-allowed cursor-none"
+                      className="mt-2 inline-flex items-center justify-center gap-3 px-8 py-3.5 border border-gray-300/40 bg-white/30 backdrop-blur-xl text-gray-800 text-[10px] font-sans tracking-[0.2em] uppercase rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.05),inset_0_2px_4px_rgba(255,255,255,0.8)] hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-500 disabled:opacity-60 disabled:cursor-not-allowed cursor-none"
                     >
                       {state === "sending" ? (
                         <>

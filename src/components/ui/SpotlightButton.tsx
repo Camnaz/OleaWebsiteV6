@@ -6,14 +6,14 @@ export function SpotlightButton({
   href, 
   children, 
   className,
-  color = "emerald",
+  color = "silver",
   target,
   rel
 }: { 
   href: string, 
   children: React.ReactNode, 
   className: string,
-  color?: "emerald" | "amber" | "sky" | "violet",
+  color?: "gray" | "black" | "silver" | "emerald" | "teal",
   target?: string,
   rel?: string
 }) {
@@ -49,10 +49,12 @@ export function SpotlightButton({
     setOpacity(0);
   };
 
-  let glowColor = "rgba(16,185,129,0.25)";
-  if (color === "amber") glowColor = "rgba(245,158,11,0.25)";
-  if (color === "sky") glowColor = "rgba(14,165,233,0.25)";
-  if (color === "violet") glowColor = "rgba(167,139,250,0.3)";
+  let glowColor = "rgba(156,163,175,0.25)";
+  if (color === "gray") glowColor = "rgba(107,114,128,0.25)";
+  if (color === "black") glowColor = "rgba(0,0,0,0.15)";
+  if (color === "silver") glowColor = "rgba(156,163,175,0.25)";
+  if (color === "emerald") glowColor = "rgba(16,185,129,0.3)";
+  if (color === "teal") glowColor = "rgba(20,184,166,0.3)";
 
   return (
     <a
@@ -63,7 +65,7 @@ export function SpotlightButton({
       onMouseMove={handleMouseMove}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      onMouseEnter={handleMouseEnter}
+      onMouseEnter={handleMouseEnter} onTouchStart={(e) => { setPosition({ x: e.touches[0].clientX - (e.target as HTMLElement).getBoundingClientRect().left, y: e.touches[0].clientY - (e.target as HTMLElement).getBoundingClientRect().top }); setOpacity(1); setTimeout(() => setOpacity(0), 1000); }}
       onMouseLeave={handleMouseLeave}
       className={`relative overflow-hidden ${className}`}
     >

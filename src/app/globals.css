@@ -28,16 +28,17 @@
 @layer base {
   * {
     border-color: var(--color-titanium-light);
-    cursor: none !important;
   }
+
   html {
-    background-color: #fafafa;
+    background-color: #f8fafc;
+    overscroll-behavior-y: none;
   }
   body {
     background-color: transparent !important;
     color: #1a1a1a;
     font-feature-settings: "rlig" 1, "calt" 1;
-    overflow-x: hidden;
+    overscroll-behavior-y: none;
   }
   h1, h2, h3, h4 {
     font-family: "Source Serif 4", Georgia, serif;
@@ -45,6 +46,14 @@
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     letter-spacing: 0.01em;
   }
+}
+
+/* Performant text masking for readability over DotGrid */
+.text-mask-glow {
+  text-shadow: 0 0 24px rgba(255, 255, 255, 1), 0 0 12px rgba(255, 255, 255, 1), 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+.text-mask-glow-heavy {
+  text-shadow: 0 0 32px rgba(255, 255, 255, 1), 0 0 16px rgba(255, 255, 255, 1), 0 0 8px rgba(255, 255, 255, 0.9);
 }
 
 /* Custom scrollbar for minimalist look */
@@ -109,3 +118,16 @@
   opacity: 0.4;
   mix-blend-mode: multiply;
 }
+
+/* Fallback cursor logic: Native cursor is the default. 
+   If JS detects desktop + touchless, it adds .has-custom-cursor to the app container
+   which hides the native cursor across all children. */
+.has-custom-cursor,
+.has-custom-cursor *,
+html.has-custom-cursor,
+html.has-custom-cursor *,
+body.has-custom-cursor,
+body.has-custom-cursor * {
+  cursor: none !important;
+}
+

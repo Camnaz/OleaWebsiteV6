@@ -57,15 +57,10 @@ export function CustomCursor() {
 
     const animate = (time: number) => {
       const delta = time - lastTime;
-      // Cap delta time strictly. If we tab out and back, just skip the frame math.
-      if (delta > 50) {
-        lastTime = time;
-        requestRef.current = requestAnimationFrame(animate);
-        return;
-      }
-      
-      const dt = delta / 16.666; 
       lastTime = time;
+
+      // Prevent physics explosion on large deltas (e.g. tab switch), but never skip frames entirely
+      const dt = Math.min(delta / 16.666, 3);
 
       // Ultra-fast simple lerp for position
       pos.current.x += (mouse.current.x - pos.current.x) * 0.4;
@@ -126,17 +121,17 @@ export function CustomCursor() {
   return (
     <div 
       ref={containerRef} 
-      className="fixed top-0 left-0 w-0 h-0 pointer-events-none z-999999 will-change-transform"
+      className="fixed top-0 left-0 w-0 h-0 pointer-events-none z-[999999] will-change-transform"
     >
-      {/* Glass marble / magnifying lens for hover state with thin black ring */}
+      {/* Glass marble / magnifying lens for hover state with translucent magnification */}
       <div 
         ref={glowRef}
-        className="absolute w-5 h-5 bg-white/10 backdrop-blur-sm backdrop-saturate-150 backdrop-brightness-110 border-[0.5px] border-gray-400/40 shadow-[0_2px_8px_rgba(0,0,0,0.08),inset_0_1px_2px_rgba(255,255,255,0.8)] rounded-full will-change-transform opacity-0"
+        className="absolute w-5 h-5 bg-white/5 backdrop-blur-[2px] backdrop-saturate-[1.1] border-[0.5px] border-gray-500/30 shadow-[0_2px_8px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,0.4)] rounded-full will-change-transform opacity-0 mix-blend-difference"
       />
       
-      <div ref={dot1Ref} className="absolute w-1.5 h-1.5 bg-emerald-400 rounded-full will-change-transform mix-blend-multiply shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-      <div ref={dot2Ref} className="absolute w-1.5 h-1.5 bg-teal-400 rounded-full will-change-transform mix-blend-multiply shadow-[0_0_8px_rgba(45,212,191,0.8)]" />
-      <div ref={dot3Ref} className="absolute w-1.5 h-1.5 bg-gray-400 rounded-full will-change-transform mix-blend-multiply shadow-[0_0_8px_rgba(156,163,175,0.8)]" />
+      <div ref={dot1Ref} className="absolute w-1.5 h-1.5 bg-gray-900 rounded-full will-change-transform shadow-[0_0_8px_rgba(17,24,39,0.8)]" />
+      <div ref={dot2Ref} className="absolute w-1.5 h-1.5 bg-gray-500 rounded-full will-change-transform shadow-[0_0_8px_rgba(107,114,128,0.8)]" />
+      <div ref={dot3Ref} className="absolute w-1.5 h-1.5 bg-gray-400 rounded-full will-change-transform shadow-[0_0_8px_rgba(156,163,175,0.8)]" />
     </div>
   );
 }
