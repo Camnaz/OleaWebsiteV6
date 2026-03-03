@@ -193,7 +193,7 @@ export default function Home() {
                       <div className="flex flex-wrap gap-3 mt-8 relative z-10">
                         {["Agent Discovery", "8004 Standard Support", "Reputation Tracking", "API Integration"].map((item) => (
                           <div key={item} className="flex items-center text-gray-700 text-xs font-sans font-bold tracking-widest uppercase bg-white/80 backdrop-blur-md rounded-2xl p-3 md:px-5 border border-gray-200/80 shadow-[0_4px_15px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,1)] transition-transform will-change-transform hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(16,185,129,0.15),inset_0_1px_1px_rgba(255,255,255,1)] hover:border-emerald-200/50 group/tag">
-                            <div className="w-1.5 h-1.5 bg-gray-400 mr-3 rounded-full shadow-[0_0_8px_rgba(156,163,175,0.6)] group-hover/tag:bg-linear-to-tr group-hover/tag:from-emerald-600 group-hover/tag:to-emerald-400 group-hover/tag:shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-all duration-300"></div>
+                            <div className="w-1.5 h-1.5 bg-linear-to-tr from-gray-400 to-gray-300 mr-3 rounded-full shadow-[0_0_8px_rgba(156,163,175,0.6)] group-hover/tag:from-emerald-600 group-hover/tag:to-emerald-400 group-hover/tag:shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-all duration-300"></div>
                             {item}
                           </div>
                         ))}
@@ -254,7 +254,7 @@ export default function Home() {
                       <div className="flex flex-wrap gap-3 mt-8 relative z-10">
                         {["Parallel Execution", "Low Gas Costs", "EVM Compatible", "Immutable Finality"].map((item) => (
                           <div key={item} className="flex items-center text-gray-700 text-xs font-sans font-bold tracking-widest uppercase bg-white/80 backdrop-blur-md rounded-2xl p-3 md:px-5 border border-gray-200/80 shadow-[0_4px_15px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,1)] transition-transform will-change-transform hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(20,184,166,0.15),inset_0_1px_1px_rgba(255,255,255,1)] hover:border-teal-200/50 group/tag">
-                            <div className="w-1.5 h-1.5 bg-gray-400 mr-3 rounded-full shadow-[0_0_8px_rgba(156,163,175,0.6)] group-hover/tag:bg-linear-to-tr group-hover/tag:from-teal-600 group-hover/tag:to-teal-400 group-hover/tag:shadow-[0_0_10px_rgba(20,184,166,0.8)] transition-all duration-300"></div>
+                            <div className="w-1.5 h-1.5 bg-linear-to-tr from-gray-400 to-gray-300 mr-3 rounded-full shadow-[0_0_8px_rgba(156,163,175,0.6)] group-hover/tag:from-teal-600 group-hover/tag:to-teal-400 group-hover/tag:shadow-[0_0_10px_rgba(20,184,166,0.8)] transition-all duration-300"></div>
                             {item}
                           </div>
                         ))}
