@@ -180,7 +180,7 @@ export default function Home() {
                   <div className="flex-1 flex flex-col items-start text-left relative z-10">
                     <div className="relative p-6 md:p-10 bg-linear-to-b from-white/90 to-white/60 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]">
                       <div className="inline-flex items-center px-4 py-2 border border-gray-200/80 bg-white/80 backdrop-blur-sm text-gray-800 text-[10px] uppercase tracking-[0.2em] font-sans font-bold rounded-full shadow-sm relative z-10 mb-6 group-hover/xilo:border-emerald-200/50 transition-colors duration-700">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-linear-to-tr from-emerald-600 to-emerald-400 mr-2 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                         Beta
                       </div>
                       
@@ -193,7 +193,7 @@ export default function Home() {
                       <div className="flex flex-wrap gap-3 mt-8 relative z-10">
                         {["Agent Discovery", "8004 Standard Support", "Reputation Tracking", "API Integration"].map((item) => (
                           <div key={item} className="flex items-center text-gray-700 text-xs font-sans font-bold tracking-widest uppercase bg-white/80 backdrop-blur-md rounded-2xl p-3 md:px-5 border border-gray-200/80 shadow-[0_4px_15px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,1)] transition-transform will-change-transform hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(16,185,129,0.15),inset_0_1px_1px_rgba(255,255,255,1)] hover:border-emerald-200/50 group/tag">
-                            <div className="w-1.5 h-1.5 bg-gray-400 mr-3 rounded-full shadow-[0_0_8px_rgba(156,163,175,0.6)] group-hover/tag:bg-emerald-400 group-hover/tag:shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-colors duration-300"></div>
+                            <div className="w-1.5 h-1.5 bg-gray-400 mr-3 rounded-full shadow-[0_0_8px_rgba(156,163,175,0.6)] group-hover/tag:bg-linear-to-tr group-hover/tag:from-emerald-600 group-hover/tag:to-emerald-400 group-hover/tag:shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-all duration-300"></div>
                             {item}
                           </div>
                         ))}
@@ -241,7 +241,7 @@ export default function Home() {
                   <div className="flex-1 flex flex-col items-start text-left relative z-10">
                     <div className="relative p-6 md:p-10 bg-linear-to-b from-white/90 to-white/60 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]">
                       <div className="inline-flex items-center px-4 py-2 border border-gray-200/80 bg-white/80 backdrop-blur-sm text-gray-800 text-[10px] uppercase tracking-[0.2em] font-sans font-bold rounded-full shadow-sm relative z-10 mb-6 group-hover/sylva:border-teal-200/50 transition-colors duration-700">
-                        <span className="w-1.5 h-1.5 rounded-full bg-teal-500 mr-2 shadow-[0_0_8px_rgba(20,184,166,0.6)] animate-pulse" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-linear-to-tr from-teal-600 to-teal-400 mr-2 shadow-[0_0_8px_rgba(20,184,166,0.6)] animate-pulse" />
                         Pre-Beta
                       </div>
                       
@@ -254,7 +254,7 @@ export default function Home() {
                       <div className="flex flex-wrap gap-3 mt-8 relative z-10">
                         {["Parallel Execution", "Low Gas Costs", "EVM Compatible", "Immutable Finality"].map((item) => (
                           <div key={item} className="flex items-center text-gray-700 text-xs font-sans font-bold tracking-widest uppercase bg-white/80 backdrop-blur-md rounded-2xl p-3 md:px-5 border border-gray-200/80 shadow-[0_4px_15px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,1)] transition-transform will-change-transform hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(20,184,166,0.15),inset_0_1px_1px_rgba(255,255,255,1)] hover:border-teal-200/50 group/tag">
-                            <div className="w-1.5 h-1.5 bg-gray-400 mr-3 rounded-full shadow-[0_0_8px_rgba(156,163,175,0.6)] group-hover/tag:bg-teal-400 group-hover/tag:shadow-[0_0_10px_rgba(20,184,166,0.8)] transition-colors duration-300"></div>
+                            <div className="w-1.5 h-1.5 bg-gray-400 mr-3 rounded-full shadow-[0_0_8px_rgba(156,163,175,0.6)] group-hover/tag:bg-linear-to-tr group-hover/tag:from-teal-600 group-hover/tag:to-teal-400 group-hover/tag:shadow-[0_0_10px_rgba(20,184,166,0.8)] transition-all duration-300"></div>
                             {item}
                           </div>
                         ))}
