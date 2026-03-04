@@ -42,7 +42,10 @@ export function SpotlightButton({
   };
 
   const handleMouseEnter = () => {
-    setOpacity(1);
+    // Only show glow on devices that support hover (not touch devices)
+    if (window.matchMedia('(hover: hover)').matches) {
+      setOpacity(1);
+    }
   };
 
   const handleMouseLeave = () => {
@@ -66,7 +69,11 @@ export function SpotlightButton({
       onMouseMove={handleMouseMove}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      onMouseEnter={handleMouseEnter} onTouchStart={(e) => { setPosition({ x: e.touches[0].clientX - (e.target as HTMLElement).getBoundingClientRect().left, y: e.touches[0].clientY - (e.target as HTMLElement).getBoundingClientRect().top }); setOpacity(1); setTimeout(() => setOpacity(0), 1000); }}
+      onMouseEnter={handleMouseEnter} 
+      onTouchStart={() => {
+        // Explicitly clear any existing hover states on touch to prevent sticky glow states
+        setOpacity(0);
+      }}
       onMouseLeave={handleMouseLeave}
       className={`relative overflow-hidden ${className}`}
     >

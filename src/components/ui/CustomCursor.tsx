@@ -129,9 +129,9 @@ export function CustomCursor() {
         className="absolute w-5 h-5 bg-white/5 backdrop-blur-[2px] backdrop-saturate-[1.1] border-[0.5px] border-gray-500/30 shadow-[0_2px_8px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,0.4)] rounded-full will-change-transform opacity-0 mix-blend-difference"
       />
       
-      <div ref={dot1Ref} className="absolute w-1.5 h-1.5 bg-gray-900 rounded-full will-change-transform shadow-[0_0_8px_rgba(17,24,39,0.8)]" />
-      <div ref={dot2Ref} className="absolute w-1.5 h-1.5 bg-gray-500 rounded-full will-change-transform shadow-[0_0_8px_rgba(107,114,128,0.8)]" />
-      <div ref={dot3Ref} className="absolute w-1.5 h-1.5 bg-gray-400 rounded-full will-change-transform shadow-[0_0_8px_rgba(156,163,175,0.8)]" />
+      <div ref={dot1Ref} className="absolute w-1.5 h-1.5 bg-emerald-400 rounded-full will-change-transform shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+      <div ref={dot2Ref} className="absolute w-1.5 h-1.5 bg-cyan-400 rounded-full will-change-transform shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+      <div ref={dot3Ref} className="absolute w-1.5 h-1.5 bg-teal-400 rounded-full will-change-transform shadow-[0_0_8px_rgba(45,212,191,0.8)]" />
     </div>
   );
 }
