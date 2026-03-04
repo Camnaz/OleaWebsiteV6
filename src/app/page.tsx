@@ -25,7 +25,7 @@ export default function Home() {
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-3xl relative z-20"
             >
-              <div className="relative p-6 md:p-10 bg-linear-to-b from-white/95 to-white/80 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl md:rounded-[2.5rem] border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]">
+              <div className="relative p-6 md:p-10 bg-linear-to-b from-white/98 to-white/95 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl md:rounded-[2.5rem] border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]">
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif tracking-[-0.02em] mb-6 leading-[1.15] text-gray-900 relative z-10">
                   Infrastructure for <br />
                   <span className="font-sans font-normal not-italic tracking-[-0.02em] text-transparent bg-clip-text bg-linear-to-r from-cyan-400 via-emerald-400 to-teal-600 pr-1 drop-shadow-sm">autonomous</span> <br />
@@ -67,7 +67,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: "some" }}
                 transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="relative inline-block p-6 md:p-10 bg-linear-to-b from-white/95 to-white/80 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl md:rounded-[2.5rem] border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]"
+                className="relative inline-block p-6 md:p-10 bg-linear-to-b from-white/98 to-white/95 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl md:rounded-[2.5rem] border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]"
               >
                 <motion.h2 
                   initial={{ opacity: 0, y: 30,  }}
@@ -123,7 +123,7 @@ export default function Home() {
                     transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
                     className={`flex flex-col max-w-xs ${align} group relative`}
                   >
-                    <div className="relative p-6 md:p-8 bg-linear-to-b from-white/95 to-white/80 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)] transition-all duration-700 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06),inset_0_2px_4px_rgba(255,255,255,1)] hover:border-white/80 group-hover:bg-white/80">
+                    <div className="relative p-6 md:p-8 bg-linear-to-b from-white/98 to-white/95 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)] transition-all duration-700 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06),inset_0_2px_4px_rgba(255,255,255,1)] hover:border-white/80 group-hover:bg-white/80">
                       <div className={`mb-6 p-4 rounded-2xl bg-white/60 backdrop-blur-md border border-white/60 shadow-[0_4px_15px_rgba(0,0,0,0.03),inset_0_1px_2px_rgba(255,255,255,0.9)] inline-flex relative overflow-hidden transition-all duration-700 group-hover:scale-105 group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.08),inset_0_1px_2px_rgba(255,255,255,1)]`}>
                         <div className="absolute inset-0 bg-linear-to-br from-white/90 to-white/40 pointer-events-none" />
                         {feature.icon}
@@ -151,7 +151,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.1 }}
                 transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="relative inline-block p-6 md:p-10 bg-linear-to-b from-white/95 to-white/80 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)] z-10"
+                className="relative inline-block p-6 md:p-10 bg-linear-to-b from-white/98 to-white/95 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)] z-10"
               >
                 <motion.h2 
                   initial={{ opacity: 0, y: 30 }}
@@ -178,7 +178,7 @@ export default function Home() {
               >
                 <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24 relative group/xilo">
                   <div className="flex-1 flex flex-col items-start text-left relative z-10">
-                    <div className="relative p-6 md:p-10 bg-linear-to-b from-white/95 to-white/80 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]">
+                    <div className="relative p-6 md:p-10 bg-linear-to-b from-white/98 to-white/95 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]">
                       <div className="inline-flex items-center px-4 py-2 border border-gray-200/80 bg-white/80 backdrop-blur-sm text-gray-800 text-[10px] uppercase tracking-[0.2em] font-sans font-bold rounded-full shadow-sm relative z-10 mb-6 group-hover/xilo:border-cyan-200/50 transition-colors duration-700">
                         <span className="w-1.5 h-1.5 rounded-full bg-linear-to-tr from-cyan-500 to-cyan-300 mr-2 animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
                         Beta
@@ -239,7 +239,7 @@ export default function Home() {
               >
                 <div className="flex flex-col lg:flex-row-reverse items-center gap-16 lg:gap-24 relative group/sylva">
                   <div className="flex-1 flex flex-col items-start text-left relative z-10">
-                    <div className="relative p-6 md:p-10 bg-linear-to-b from-white/95 to-white/80 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]">
+                    <div className="relative p-6 md:p-10 bg-linear-to-b from-white/98 to-white/95 md:from-white/90 md:to-white/60 md:backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.02),inset_0_2px_4px_rgba(255,255,255,1)] md:shadow-[0_8px_32px_rgba(0,0,0,0.03),inset_0_2px_4px_rgba(255,255,255,1)]">
                       <div className="inline-flex items-center px-4 py-2 border border-gray-200/80 bg-white/80 backdrop-blur-sm text-gray-800 text-[10px] uppercase tracking-[0.2em] font-sans font-bold rounded-full shadow-sm relative z-10 mb-6 group-hover/sylva:border-teal-200/50 transition-colors duration-700">
                         <span className="w-1.5 h-1.5 rounded-full bg-linear-to-tr from-teal-500 to-teal-300 mr-2 shadow-[0_0_8px_rgba(20,184,166,0.6)] animate-pulse" />
                         Pre-Beta
