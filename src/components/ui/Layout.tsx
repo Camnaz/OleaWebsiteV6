@@ -45,7 +45,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <Navigation />
       <main className="relative z-10">{children}</main>
 
-      <footer className="relative z-20 border-t-[0.5px] border-gray-200/60 bg-white/80 backdrop-blur-xl py-4 mt-20">
+      <footer className="relative z-20 border-t-[0.5px] border-gray-200/60 bg-white/95 md:bg-white/80 backdrop-blur-md md:backdrop-blur-xl py-4 mt-20">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3">
             <span className="text-sm font-serif tracking-tight text-gray-900">Olea Computer</span>

@@ -32,7 +32,7 @@ export function DotGrid() {
       canvas.style.height = `${currentHeight}px`;
     };
 
-    const isMobile = window.innerWidth < 768;
+    const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
     const SPACING = isMobile ? 32 : 36;
     
     // Time tracking
@@ -53,11 +53,11 @@ export function DotGrid() {
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Scroll speed modifier - physically moves the grid slightly with scroll for parallax
-      const scrollOffset = scrollY * 0.15; // Slowed down from 0.4 for less distraction
+      // Scroll speed modifier - disabled on mobile to prevent stutter/jitter with address bar
+      const scrollOffset = isMobile ? 0 : scrollY * 0.15; 
       
       // Safe modulo fixes Javascript negative modulo bug on iOS bounce scroll
-      const offsetY = ((scrollOffset % SPACING) + SPACING) % SPACING;
+      const offsetY = isMobile ? 0 : ((scrollOffset % SPACING) + SPACING) % SPACING;
       
       const cols = Math.ceil(w / SPACING) + 2;
       const rows = Math.ceil(h / SPACING) + 2;
@@ -119,13 +119,12 @@ export function DotGrid() {
           // Optimization: skip drawing invisible dots
           if (alphaWithFade < 0.02) continue;
 
-          // Color palette: Silver/Metal/White & Black instead of teals and emeralds
-          // Base: soft silver/titanium (mostly desaturated)
-          // Peak: dark grey/black
+          // Color palette: 'Hopeful' Alien Tech
+          // Base: soft luminescent cyans/emeralds instead of grey/black
           
-          const hue = 210; // Slate/Silver hue
-          const sat = 10; // Very low saturation
-          const light = 70 - (pulse * 50); // Interpolate from light silver (70%) down to dark charcoal (20%)
+          const hue = 160 + (pulse * 40); // Interpolate between Emerald (160) and Cyan (200)
+          const sat = 60 + (pulse * 40); // More saturated when pulsing
+          const light = 85 - (pulse * 35); // Base is light, darkens/intensifies on pulse
           
           ctx.beginPath();
           ctx.arc(finalX * dpr, finalY * dpr, dotSize * dpr, 0, Math.PI * 2);

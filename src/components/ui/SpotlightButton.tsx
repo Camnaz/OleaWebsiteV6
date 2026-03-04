@@ -13,7 +13,7 @@ export function SpotlightButton({
   href: string, 
   children: React.ReactNode, 
   className: string,
-  color?: "gray" | "black" | "silver" | "emerald" | "teal",
+  color?: "gray" | "black" | "silver" | "emerald" | "teal" | "cyan",
   target?: string,
   rel?: string
 }) {
@@ -55,6 +55,7 @@ export function SpotlightButton({
   if (color === "silver") glowColor = "rgba(156,163,175,0.25)";
   if (color === "emerald") glowColor = "rgba(16,185,129,0.3)";
   if (color === "teal") glowColor = "rgba(20,184,166,0.3)";
+  if (color === "cyan") glowColor = "rgba(34,211,238,0.3)";
 
   return (
     <a

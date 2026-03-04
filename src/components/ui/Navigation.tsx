@@ -72,8 +72,8 @@ export function Navigation() {
       <header
         className={`fixed top-0 left-0 right-0 z-70 transition-all duration-700 ${
           isScrolled 
-            ? "bg-white/70 backdrop-blur-2xl border-b border-gray-200/60 shadow-[0_8px_32px_rgba(0,0,0,0.02),inset_0_1px_0_rgba(255,255,255,0.8)] py-4" 
-            : "bg-white/40 backdrop-blur-xl py-4"
+            ? "bg-white/80 md:bg-white/70 backdrop-blur-lg md:backdrop-blur-2xl border-b border-gray-200/60 shadow-[0_8px_32px_rgba(0,0,0,0.02),inset_0_1px_0_rgba(255,255,255,0.8)] py-4" 
+            : "bg-white/60 md:bg-white/40 backdrop-blur-md md:backdrop-blur-xl py-4"
         }`}
       >
         <div className="absolute inset-0 bg-linear-to-b from-white/90 to-transparent pointer-events-none" />
@@ -127,7 +127,7 @@ export function Navigation() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden relative z-50 text-gray-700 p-2 bg-white/90 backdrop-blur-xl rounded-full border border-gray-200/80 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_4px_10px_rgba(0,0,0,0.04)] hover:bg-white transition-colors"
+            className="md:hidden relative z-50 text-gray-700 p-2 bg-white/95 backdrop-blur-md rounded-full border border-gray-200/80 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_4px_10px_rgba(0,0,0,0.04)] hover:bg-white transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -143,7 +143,7 @@ export function Navigation() {
           opacity: isMobileMenuOpen ? 1 : 0,
           pointerEvents: isMobileMenuOpen ? "auto" : "none",
         }}
-        className="fixed inset-0 bg-white/95 backdrop-blur-3xl z-60"
+        className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60"
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.02)_0%,transparent_100%)] pointer-events-none" />
 
