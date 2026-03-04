@@ -72,7 +72,7 @@ export function ContactPanel({ isOpen, onClose }: ContactPanelProps) {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: "100%", opacity: 0 }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-0 right-0 bottom-0 z-[80] w-full max-w-md bg-white/90 backdrop-blur-2xl border-l border-gray-200/50 shadow-[-20px_0_60px_rgba(0,0,0,0.06)] flex flex-col"
+            className="fixed top-0 right-0 bottom-0 z-[80] w-full max-w-md bg-white/95 md:bg-white/90 backdrop-blur-md md:backdrop-blur-2xl border-l border-gray-200/50 shadow-[-20px_0_60px_rgba(0,0,0,0.06)] flex flex-col"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100/80">
