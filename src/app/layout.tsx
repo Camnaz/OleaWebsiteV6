@@ -19,6 +19,17 @@ const sourceSerif4 = Source_Serif_4({
 export const metadata: Metadata = {
   title: "Olea Computer | Building the infrastructure for autonomous intelligence",
   description: "We're building the foundational infrastructure for a world where autonomous agents operate as trusted economic participants.",
+  icons: {
+    icon: [
+      { url: "/images/olea_favicon/favicon.ico" },
+      { url: "/images/olea_favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/images/olea_favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      { url: "/images/olea_favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  manifest: "/images/olea_favicon/site.webmanifest",
 };
 
 export default function RootLayout({

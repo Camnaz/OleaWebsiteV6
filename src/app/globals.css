@@ -87,6 +87,30 @@
   background-image: linear-gradient(to right, #1a1a1a, #4b5563, #9ca3af);
 }
 
+/* Natural-lighting gradient for hero/section headings.
+   Mimics light refracting through glass: warm white → bioluminescent teal-cyan → soft emerald.
+   The gradient angle (135deg) follows the same diagonal as the liquid-panel specular highlight. */
+.heading-glow {
+  background: linear-gradient(
+    135deg,
+    #0d9488 0%,       /* deep teal — provides contrast against white background */
+    #059669 35%,      /* deep emerald */
+    #10b981 65%,      /* brighter emerald for the glow */
+    #14b8a6 100%      /* bright teal */
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* Darker base shadow for legibility + softer, larger outer bloom */
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.15)) drop-shadow(0 0 16px rgba(16, 185, 129, 0.4));
+}
+
+/* Hide seams between consecutive panels — dissolve border opacity at edges */
+.panel-fade-border {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
 @keyframes hero-gradient {
   0% {
     background-position: 0% 50%;
@@ -131,3 +155,56 @@ body.has-custom-cursor * {
   cursor: none !important;
 }
 
+
+/* ─── Liquid Glass ──────────────────────────────────────────────────────────
+   A fully CSS-based glass effect:
+   - Real backdrop-blur + saturation for the frosted base
+   - ::before  → bright top-edge specular highlight
+   - ::after   → soft inner refraction gradient (simulates light bending)
+   - box-shadow → depth, lift, and subtle outer glow
+   Works across all modern browsers (Chrome, Safari, Firefox, Edge).
+─────────────────────────────────────────────────────────────────────────── */
+.liquid-panel {
+  /* Nearly solid base so text is easily readable and dots are barely visible */
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(48px) saturate(2) brightness(1.02);
+  -webkit-backdrop-filter: blur(48px) saturate(2) brightness(1.02);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.95) inset,
+    0 -1px 0 rgba(255,255,255,0.2) inset,
+    1px 0 0 rgba(255,255,255,0.4) inset,
+    -1px 0 0 rgba(255,255,255,0.4) inset,
+    0 8px 32px rgba(0,0,0,0.05),
+    0 2px 8px rgba(0,0,0,0.03);
+  isolation: isolate;
+}
+
+/* Specular highlight band across the top — sits behind content */
+.liquid-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.55) 0%,
+    rgba(255,255,255,0.18) 30%,
+    rgba(255,255,255,0.04) 60%,
+    rgba(255,255,255,0.0) 100%
+  );
+  z-index: -1;
+}
+
+/* Inner refraction / depth layer — sits behind content */
+.liquid-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(255,255,255,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(200,230,255,0.12) 0%, transparent 60%);
+  z-index: -1;
+}

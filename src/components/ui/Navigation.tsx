@@ -70,13 +70,13 @@ export function Navigation() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-70 transition-all duration-700 ${
+        className={`fixed top-0 left-0 right-0 z-70 transition-all duration-500 ${
           isScrolled 
-            ? "bg-white/80 md:bg-white/70 backdrop-blur-lg md:backdrop-blur-2xl border-b border-gray-200/60 shadow-[0_8px_32px_rgba(0,0,0,0.02),inset_0_1px_0_rgba(255,255,255,0.8)] py-4" 
-            : "bg-white/60 md:bg-white/40 backdrop-blur-md md:backdrop-blur-xl py-4"
+            ? "liquid-panel border-b border-white/30 shadow-[0_4px_24px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.9)] py-4" 
+            : "py-4"
         }`}
       >
-        <div className="absolute inset-0 bg-linear-to-b from-white/90 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-b from-white/80 to-transparent pointer-events-none" />
         
         <div className="container mx-auto px-6 flex items-center justify-between relative z-10 h-9">
           <a 
@@ -93,7 +93,7 @@ export function Navigation() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="flex items-center"
             >
-              <span className="text-xl font-serif tracking-tight text-gray-900 group-hover:text-gray-600 transition-colors duration-500 drop-shadow-sm">Olea Computer</span>
+              <span className="text-xl font-serif tracking-tight text-gray-900 group-hover:text-emerald-500 transition-colors duration-500 drop-shadow-sm">Olea Computer</span>
             </motion.div>
           </a>
 
@@ -109,14 +109,14 @@ export function Navigation() {
                 {link.name === "Contact" ? (
                   <button
                     onClick={() => setIsContactOpen(true)}
-                    className="text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-gray-600 hover:text-gray-900 transition-colors duration-500 drop-shadow-sm"
+                    className="text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-gray-600 hover:text-emerald-500 transition-colors duration-500 drop-shadow-sm"
                   >
                     {link.name}
                   </button>
                 ) : (
                   <a
                     href={link.href} onClick={(e) => handleLinkClick(e, link.href)}
-                    className="text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-gray-600 hover:text-gray-900 transition-colors duration-500 relative group drop-shadow-sm"
+                    className="text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-gray-600 hover:text-emerald-500 transition-colors duration-500 relative group drop-shadow-sm"
                   >
                     {link.name}
                   </a>
@@ -127,7 +127,7 @@ export function Navigation() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden relative z-50 text-gray-700 p-2 bg-white/95 backdrop-blur-md rounded-full border border-gray-200/80 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_4px_10px_rgba(0,0,0,0.04)] hover:bg-white transition-colors"
+            className="md:hidden relative z-50 text-gray-700 p-2 liquid-panel rounded-full border border-gray-200/80 shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_4px_10px_rgba(0,0,0,0.04)] hover:bg-white/50 transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -141,25 +141,27 @@ export function Navigation() {
         initial={false}
         animate={{
           opacity: isMobileMenuOpen ? 1 : 0,
-          pointerEvents: isMobileMenuOpen ? "auto" : "none",
+          y: isMobileMenuOpen ? 0 : -8,
         }}
-        className="fixed inset-0 bg-white/98 backdrop-blur-xl z-60"
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        style={{ pointerEvents: isMobileMenuOpen ? "auto" : "none", visibility: isMobileMenuOpen ? "visible" : "hidden" }}
+        className="fixed inset-0 z-60 bg-white/90 backdrop-blur-xl"
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.02)_0%,transparent_100%)] pointer-events-none" />
 
-        <div className="relative z-10 h-full w-full flex flex-col items-center justify-center space-y-12 pt-24 pointer-events-none">
+        <div className="relative z-10 h-full w-full flex flex-col items-center justify-center space-y-12">
         
         {navLinks.map((link, i) => (
           <motion.div
             key={link.name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isMobileMenuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.5, delay: isMobileMenuOpen ? i * 0.1 : 0, ease: "easeOut" }}
-            className="relative z-10 pointer-events-auto"
+            initial={false}
+            animate={isMobileMenuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+            transition={{ duration: 0.3, delay: isMobileMenuOpen ? i * 0.07 : 0, ease: "easeOut" }}
+            className="relative z-10"
           >
             {link.name === "Contact" ? (
               <button
-                className="text-2xl font-sans font-bold tracking-[0.2em] uppercase text-gray-800 hover:text-gray-500 transition-colors duration-300 relative z-10"
+                className="text-2xl font-sans font-bold tracking-[0.2em] uppercase text-gray-800 hover:text-emerald-500 transition-colors duration-300"
                 onClick={() => { setIsMobileMenuOpen(false); setIsContactOpen(true); }}
               >
                 {link.name}
@@ -167,7 +169,7 @@ export function Navigation() {
             ) : (
               <a
                 href={link.href} onClick={(e) => handleLinkClick(e, link.href)}
-                className="text-2xl font-sans font-bold tracking-[0.2em] uppercase text-gray-800 hover:text-gray-500 transition-colors duration-300 relative z-10"
+                className="text-2xl font-sans font-bold tracking-[0.2em] uppercase text-gray-800 hover:text-emerald-500 transition-colors duration-300"
               >
                 {link.name}
               </a>
@@ -176,7 +178,7 @@ export function Navigation() {
         ))}
         </div>
       </motion.div>
-      <ContactPanel isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <ContactPanel isOpen={isContactOpen} onCloseAction={() => setIsContactOpen(false)} />
     </>
   );
 }

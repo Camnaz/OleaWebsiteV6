@@ -10,7 +10,7 @@ export function DotGrid() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d", { alpha: false }); 
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -19,13 +19,9 @@ export function DotGrid() {
     const resize = () => {
       const currentWidth = window.innerWidth;
       const currentHeight = window.innerHeight;
-      
-      // On mobile, ignore vertical-only resizes (address bar hide/show) to prevent layout thrashing
-      if (currentWidth < 768 && currentWidth === lastWidth && canvas.width > 0) {
-        return;
-      }
+      // On mobile, ignore vertical-only resizes (address bar hide/show)
+      if (currentWidth < 768 && currentWidth === lastWidth && canvas.width > 0) return;
       lastWidth = currentWidth;
-
       canvas.width = currentWidth * dpr;
       canvas.height = currentHeight * dpr;
       canvas.style.width = `${currentWidth}px`;
@@ -33,32 +29,41 @@ export function DotGrid() {
     };
 
     const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+    // Tighter spacing on mobile so more dots fit on screen
     const SPACING = isMobile ? 32 : 36;
-    
-    // Time tracking
+
+    // On mobile: throttle to ~20fps to prevent rAF from fighting touch/scroll events
+    // On desktop: full 60fps
+    const FRAME_BUDGET = isMobile ? 50 : 0; // ms between frames
+    let lastFrameTime = 0;
+
     const startTime = performance.now();
 
+    // Cached scroll value — updated via passive scroll listener, NOT read inside rAF
+    // This prevents forced layout reflow inside the animation loop on mobile
+    let cachedScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+    const onScroll = () => { cachedScrollY = window.scrollY; };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
     const draw = (currentTime: number) => {
-      if (!currentTime) currentTime = performance.now();
-      
-      const time = (currentTime - startTime) / 1000; // time in seconds
-      
-      // Read perfectly synced scroll position directly in rAF (0 latency, 0 snapping)
-      const scrollY = window.scrollY;
+      rafRef.current = requestAnimationFrame(draw);
+
+      // Throttle on mobile to reduce CPU pressure during scroll
+      if (isMobile && currentTime - lastFrameTime < FRAME_BUDGET) return;
+      lastFrameTime = currentTime;
+
+      const time = (currentTime - startTime) / 1000;
+      const scrollY = cachedScrollY;
 
       const w = canvas.width / dpr;
       const h = canvas.height / dpr;
 
-      // Clear with background color
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Scroll speed modifier - disabled on mobile to prevent stutter/jitter with address bar
-      const scrollOffset = isMobile ? 0 : scrollY * 0.15; 
-      
-      // Safe modulo fixes Javascript negative modulo bug on iOS bounce scroll
+      // Scroll parallax — disabled on mobile to prevent any jitter
+      const scrollOffset = isMobile ? 0 : scrollY * 0.12;
       const offsetY = isMobile ? 0 : ((scrollOffset % SPACING) + SPACING) % SPACING;
-      
+
       const cols = Math.ceil(w / SPACING) + 2;
       const rows = Math.ceil(h / SPACING) + 2;
 
@@ -67,82 +72,66 @@ export function DotGrid() {
       const maxDist = Math.sqrt(cx * cx + cy * cy);
 
       for (let row = -1; row < rows; row++) {
-        // Screen Y coordinate
         const screenY = row * SPACING - offsetY;
-        
-        // World Y coordinate (stays constant for a specific dot as you scroll)
         const worldY = screenY + scrollOffset;
 
         for (let col = -1; col < cols; col++) {
           const screenX = col * SPACING;
 
-          // Radial fade from screen center - much wider now so dots reach the edges more
+          // Radial fade from center
           const dxC = screenX - cx;
           const dyC = screenY - cy;
           const distFromCenter = Math.sqrt(dxC * dxC + dyC * dyC);
-          const radialFade = Math.max(0.4, 1 - (distFromCenter / (maxDist * 1.8)));
+          const radialFade = Math.max(0.3, 1 - (distFromCenter / (maxDist * 1.6)));
 
-          // --- Sweeping Wave Pattern ---
-          // Creates a large, sweeping diagonal wave that travels across the grid
-          const waveFreqX = 0.002; // Slower wave frequency
-          const waveFreqY = 0.003;
-          const timePhase = time * 0.3; // Slower time evolution
-          const scrollPhase = scrollY * 0.001; // Slower scroll evolution
-          
+          // Slow sweeping wave
+          const waveFreqX = 0.0018;
+          const waveFreqY = 0.0025;
+          const timePhase = time * (isMobile ? 0.15 : 0.25);
+          const scrollPhase = isMobile ? 0 : scrollY * 0.0008;
+
           const phase1 = (screenX * waveFreqX) + (worldY * waveFreqY) - timePhase - scrollPhase;
-          const phase2 = (screenX * waveFreqX * 1.5) - (worldY * waveFreqY * 0.8) + (timePhase * 0.4);
-          
-          // Combine waves and normalize to 0..1
-          let pulse = (Math.sin(phase1) + Math.cos(phase2)) * 0.5 + 0.5;
-          
-          // Sharpen the wave peaks to make the pattern more distinct
-          pulse = Math.pow(pulse, 2.5);
+          const phase2 = (screenX * waveFreqX * 1.4) - (worldY * waveFreqY * 0.7) + (timePhase * 0.35);
 
-          // Physical wave displacement (dots physically move slightly in sine waves)
-          const dispX = Math.sin(phase1) * 6; // Reduced displacement even further
-          const dispY = Math.cos(phase1) * 6;
-          
+          let pulse = (Math.sin(phase1) + Math.cos(phase2)) * 0.5 + 0.5;
+          pulse = Math.pow(pulse, 3);
+
+          // Displacement — zero on mobile to avoid any movement fighting scroll
+          const dispX = isMobile ? 0 : Math.sin(phase1) * 4;
+          const dispY = isMobile ? 0 : Math.cos(phase1) * 4;
+
           const finalX = screenX + dispX;
           const finalY = screenY + dispY;
 
-          // Pulse drives size and alpha - Tone down overall size heavily on mobile
-          const baseSize = isMobile ? 0.5 : 0.6;
-          // Drastically cap max pulse size to avoid large distracting dots
-          const sizePulse = isMobile ? 0.3 : 0.5;
-          
-          const dotSize = baseSize + (pulse * sizePulse); 
-          const finalAlpha = 0.05 + (pulse * 0.20); // Very subtle alpha range to stay in background
+          const baseSize = isMobile ? 0.6 : 0.55;
+          const sizePulse = isMobile ? 0.35 : 0.45;
+          const dotSize = baseSize + (pulse * sizePulse);
 
-          // Apply radial fade
+          // Keep dots very faint — panels wash them out with liquid-panel background
+          const finalAlpha = isMobile ? (0.08 + (pulse * 0.18)) : (0.04 + (pulse * 0.14));
           const alphaWithFade = finalAlpha * radialFade;
 
-          // Optimization: skip drawing invisible dots
-          if (alphaWithFade < 0.02) continue;
+          if (alphaWithFade < 0.015) continue;
 
-          // Color palette: 'Hopeful' Alien Tech
-          // Base: soft luminescent cyans/emeralds instead of grey/black
-          
-          const hue = 160 + (pulse * 40); // Interpolate between Emerald (160) and Cyan (200)
-          const sat = 60 + (pulse * 40); // More saturated when pulsing
-          const light = 85 - (pulse * 35); // Base is light, darkens/intensifies on pulse
-          
+          const hue = 165 + (pulse * 35);
+          const sat = 50 + (pulse * 35);
+          const light = 82 - (pulse * 28);
+
           ctx.beginPath();
           ctx.arc(finalX * dpr, finalY * dpr, dotSize * dpr, 0, Math.PI * 2);
           ctx.fillStyle = `hsla(${hue}, ${sat}%, ${light}%, ${alphaWithFade.toFixed(2)})`;
           ctx.fill();
         }
       }
-
-      rafRef.current = requestAnimationFrame(draw);
     };
 
     resize();
     window.addEventListener("resize", resize, { passive: true });
-
     rafRef.current = requestAnimationFrame(draw);
 
     return () => {
       window.removeEventListener("resize", resize);
+      window.removeEventListener('scroll', onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
@@ -150,8 +139,7 @@ export function DotGrid() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
+      className="fixed inset-0 pointer-events-none z-0"
       aria-hidden="true"
     />
   );

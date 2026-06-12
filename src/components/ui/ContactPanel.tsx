@@ -6,12 +6,12 @@ import { useState } from "react";
 
 interface ContactPanelProps {
   isOpen: boolean;
-  onClose: () => void;
+  onCloseAction: () => void;
 }
 
 type State = "idle" | "sending" | "success" | "error";
 
-export function ContactPanel({ isOpen, onClose }: ContactPanelProps) {
+export function ContactPanel({ isOpen, onCloseAction }: ContactPanelProps) {
   const [state, setState] = useState<State>("idle");
   const [form, setForm] = useState({ name: "", email: "", subject: "", body: "" });
   const [errorMsg, setErrorMsg] = useState("");
@@ -41,7 +41,7 @@ export function ContactPanel({ isOpen, onClose }: ContactPanelProps) {
   };
 
   const handleClose = () => {
-    onClose();
+    onCloseAction();
     setTimeout(() => {
       setState("idle");
       setForm({ name: "", email: "", subject: "", body: "" });
@@ -72,7 +72,7 @@ export function ContactPanel({ isOpen, onClose }: ContactPanelProps) {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: "100%", opacity: 0 }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-0 right-0 bottom-0 z-[80] w-full max-w-md bg-white/95 md:bg-white/90 backdrop-blur-md md:backdrop-blur-2xl border-l border-gray-200/50 shadow-[-20px_0_60px_rgba(0,0,0,0.06)] flex flex-col"
+            className="fixed top-0 right-0 bottom-0 z-[80] w-full max-w-md liquid-panel border-l border-gray-200/50 shadow-[-20px_0_60px_rgba(0,0,0,0.06)] flex flex-col"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100/80">
@@ -185,7 +185,7 @@ export function ContactPanel({ isOpen, onClose }: ContactPanelProps) {
                     <button
                       type="submit"
                       disabled={state === "sending"}
-                      className="mt-2 inline-flex items-center justify-center gap-3 px-8 py-3.5 border border-gray-300/40 bg-white/30 backdrop-blur-xl text-gray-800 text-[10px] font-sans tracking-[0.2em] uppercase rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.05),inset_0_2px_4px_rgba(255,255,255,0.8)] hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-500 disabled:opacity-60 disabled:cursor-not-allowed cursor-none"
+                      className="mt-2 inline-flex items-center justify-center gap-3 px-8 py-3.5 border border-gray-300/40 liquid-panel text-gray-800 text-[10px] font-sans tracking-[0.2em] uppercase rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.05),inset_0_2px_4px_rgba(255,255,255,0.8)] hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-500 disabled:opacity-60 disabled:cursor-not-allowed cursor-none"
                     >
                       {state === "sending" ? (
                         <>
